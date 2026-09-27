@@ -7,5 +7,8 @@
     "install:all": "node scripts/run-all.mjs install",
     "gate:all": "node scripts/run-all.mjs gate",
     "test:all": "node scripts/run-all.mjs test"
+  },
+  "engines": {
+    "node": ">=22.5.0"
   }
 }
