@@ -6,7 +6,7 @@
  * 映射成字段级错误。手写 if/else 收集字段错误是旧教程的屎山形态之一。
  */
 import type { z } from 'zod'
-import { ValidationError, type FieldErrors } from '../../../shared/index'
+import { ValidationError } from '../../../shared/index'
 
 export function parseOrThrow<T>(schema: z.ZodType<T>, input: unknown): T {
   const result = schema.safeParse(input)
@@ -23,5 +23,5 @@ export function parseOrThrow<T>(schema: z.ZodType<T>, input: unknown): T {
       fieldErrors[path] = [issue.message]
     }
   }
-  throw new ValidationError(fieldErrors as FieldErrors)
+  throw new ValidationError(fieldErrors)
 }
