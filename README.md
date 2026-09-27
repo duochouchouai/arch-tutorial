@@ -13,14 +13,16 @@
 ├── legacy/                       ← 屎山演进（vibe coding，供「体验反例」）
 │   └── day01..06/                每个 day 独立可跑（node day*.js）
 │
-└── clean/                        ← 清洁架构手打教程
-    ├── GUIDE-day01..07.md        教程正文：概念 → 手打目标 → 验收点 → 违规→症状
-    ├── solution/day01..06/       每天参考答案（独立项目，npm install && npm run gate）
-    ├── solution/day07/
-    │   ├── backend/              综合项目参考答案（后端）
-    │   └── uniapp-login/         综合项目参考答案（uni-app 前端）
-    ├── docs/conventions.md       架构约定（每条对应可执行检查）
-    └── docs/dependency-graph.md  依赖图 / import 规则矩阵 / 数据流
+├── clean/                        ← 清洁架构手打教程
+│   ├── GUIDE-day01..07.md        教程正文：概念 → 手打目标 → 验收点 → 违规→症状
+│   ├── solution/day01..06/       每天参考答案（独立项目，npm install && npm run gate）
+│   ├── solution/day07/
+│   │   ├── backend/              综合项目参考答案（后端）
+│   │   └── uniapp-login/         综合项目参考答案（uni-app 前端）
+│   ├── docs/conventions.md       架构约定（每条对应可执行检查）
+│   └── docs/dependency-graph.md  依赖图 / import 规则矩阵 / 数据流
+│
+└── exercise/                     ← 成员练习区（每人一个目录，规则见 exercise/README.md）
 ```
 
 ## 怎么用
@@ -51,6 +53,11 @@ npm install && npm run gate     # prettier + tsc + eslint + vitest（22 文件 /
 cd clean
 npm run gate:all                # 所有 solution 的门禁，一次跑完 8 个目录
 ```
+
+### 4. 成员练习（exercise/）
+
+每人一个目录（`exercise/<你的名字>/`），从 `develop` 切 `exercise/<你的名字>` 分支，
+按 `exercise/README.md` 的规范每天提交——**先自己写，遇到困难再对照参考答案**。
 
 ## 7 天演进一览
 
