@@ -13,7 +13,7 @@ import { DomainEvent } from '../../../shared/index'
 export const UserRegisteredPayloadSchema = z.object({
   userId: z.string(),
   username: z.string(),
-  /** 注册邮箱（订阅方发欢迎邮件要用 —— 事件载荷内自带，别让订阅方回查） */
+  /** 注册邮箱（订阅方发欢迎邮件要用 —— 事件载荷内自带，避免订阅方回查） */
   email: z.string(),
   /** 注册时间（Unix 毫秒） */
   registeredAt: z.number().int(),

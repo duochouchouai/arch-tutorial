@@ -3,7 +3,7 @@
  * @author 教程组
  *
  * 主键是 (purpose, target)：注册码与重置码互不覆盖。
- * 过期行不做后台清理，由 find 时的时间判断兜底（简化说明：真实系统用定时任务清表）。
+ * 过期行不做后台清理，由 find 时的时间判断处理（简化说明：真实系统用定时任务清表）。
  */
 import type { DatabaseSync } from 'node:sqlite'
 import type { CodeStorePort } from '../domain/ports/index'

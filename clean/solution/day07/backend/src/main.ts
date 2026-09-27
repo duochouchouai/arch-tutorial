@@ -2,13 +2,13 @@
  * @file 服务入口 — 组合根（Composition Root）
  * @author 教程组
  *
- * 整个应用只有这里知道「谁是谁的实现」：
+ * 整个应用只有这里知道各端口由哪个实现充当：
  *   共享基础设施 → users 模块 → auth 模块（注入 users 的公共端口）
  *   → notifications 模块（订阅事件总线）→ HTTP 装配。
  * 「换数据库」（Day 07 Task 2）只在这里体现为一个字段透传：databaseUrl。
  * 模块自己不认识彼此的实现，全部依赖从构造函数进。
  *
- * createApp 单独导出：e2e 测试直接复用它，不另写一套装配（测的装配 = 跑的装配）。
+ * createApp 单独导出：e2e 测试直接复用它，不另写一套装配（测试装配与运行装配一致）。
  */
 import express from 'express'
 import type { DatabaseSync } from 'node:sqlite'
@@ -26,7 +26,7 @@ import { createNotificationsModule } from './modules/notifications/index'
 
 export interface AppBundle {
   app: express.Express
-  /** 暴露给 e2e 测试白盒查表用（生产代码不消费它） */
+  /** 暴露给 e2e 测试白盒查表用（生产代码不使用它） */
   db: DatabaseSync
 }
 
@@ -48,13 +48,13 @@ export function createApp(config: Config): AppBundle {
     eventBus,
     bcryptRounds: config.bcryptRounds,
   })
-  // ③ 订阅方：装配即订阅，auth 一行不改（Day 07 Task 4）
+  // ③ 订阅方：装配时完成订阅，auth 一行不改（Day 07 Task 4）
   createNotificationsModule({ eventBus })
 
   // ④ HTTP 装配
   const app = express()
   app.use(express.json())
-  // 探针：不属于任何业务模块，直接挂组合根
+  // 探针：不属于任何业务模块，直接挂在组合根
   app.get('/health', (_req, res) => {
     res.status(200).json({ status: 'ok' })
   })
@@ -63,7 +63,7 @@ export function createApp(config: Config): AppBundle {
   return { app, db }
 }
 
-// 直接运行才监听端口（被测试 import 时不启动服务）
+// 直接运行才监听端口（被测试导入时不启动服务）
 if (require.main === module) {
   // 本地开发把配置放 .env（照 .env.example 抄一份）；.env 永不进仓库
   loadEnvFile()

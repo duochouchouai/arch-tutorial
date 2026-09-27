@@ -94,7 +94,7 @@ describe('UserEntity', () => {
     expect(user.lockedUntil).toBeNull()
     expect(user.isLockedAt(time.now())).toBe(false)
     expect(user.updatedAt).toBe(2_000)
-    // 档位不清零：改密解除锁定，但「被锁过几次」的历史留着（后续再锁仍按累计档位）
+    // 档位不清零：改密解除锁定，但累计被锁次数保留（后续再锁仍按累计档位）
     expect(user.lockCount).toBe(1)
   })
 

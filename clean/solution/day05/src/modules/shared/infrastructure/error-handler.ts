@@ -3,7 +3,7 @@
  * @author 教程组
  *
  * 预期内错误（AppError 家族）：按其 code/statusCode/fieldErrors 响应。
- * 预期外错误：日志留全量现场，响应只给一句话 —— 不把堆栈和内部信息泄露给客户端。
+ * 预期外错误：日志记录完整上下文，响应只返回通用文案 —— 不把堆栈和内部信息泄露给客户端。
  */
 import type { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
 import { AppError } from '../domain/errors/index'

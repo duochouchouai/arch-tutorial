@@ -2,7 +2,7 @@
  * @file Auth API 封装 — 全前端唯一出现 uni.request 的地方
  * @author 教程组
  *
- * 这一层做三件事，一件不多：
+ * 这一层只做三件事：
  * 1. 拼 URL / 塞 Authorization 头（HTTP 细节）；
  * 2. 把响应信封**先 parse 再信**（跨边界数据纪律，与后端同一条）；
  * 3. 把失败信封映射成 ApiError（含 fieldErrors），让上层只认领域错误。
@@ -54,7 +54,7 @@ async function request<T>(schema: z.ZodType<T>, params: RequestParams): Promise<
     data: params.body,
   })
 
-  // 响应也是跨边界数据：契约不符就当服务端出错，别拿半截数据继续跑
+  // 响应也是跨边界数据：契约不符就当服务端出错，不使用不完整数据
   const envelope = EnvelopeSchema.safeParse(res.data)
   if (!envelope.success) {
     throw new ApiError('服务端响应不符合契约', res.statusCode)

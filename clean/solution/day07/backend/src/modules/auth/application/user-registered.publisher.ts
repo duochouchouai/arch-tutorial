@@ -34,7 +34,7 @@ export class UserRegisteredPublisher implements UserRegisteredPublisherPort {
         }),
       )
     } catch (err) {
-      // 注册是唯一不能坏的东西：事件发送失败也不能让用户看到失败
+      // 注册主流程不可受影响：事件发送失败也不能让用户看到失败
       console.error('[auth] 注册事件发布失败', err)
     }
   }

@@ -6,7 +6,7 @@
  * 1. 方言：占位符是 $1..$n、DDL 用 SERIAL/BOOLEAN 这类 PG 语法；
  * 2. 连接：由 pg.Pool 管理（pipelines / 重连不用自己写）。
  *
- * 这就是「依赖倒置」的兑现时刻 —— 换数据库只加了一个基础设施文件 +
+ * 这正是「依赖倒置」的体现 —— 换数据库只加了一个基础设施文件 +
  * 组合根里一个三元表达式：**domain / application / presentation 零改动**。
  */
 import { Pool } from 'pg'
@@ -30,7 +30,7 @@ const USER_COLUMNS = `
 
 export class PostgresUserAccountRepository implements UserAccountRepositoryPort {
   readonly #pool: Pool
-  /** 建表是一次性的异步准备：每个读写方法先 await 它，避免「第一个请求撞上没建好的表」 */
+  /** 建表是一次性的异步准备：每个读写方法先 await 它，避免「首个请求在表建成前执行」 */
   readonly #ready: Promise<void>
 
   constructor(connectionString: string) {

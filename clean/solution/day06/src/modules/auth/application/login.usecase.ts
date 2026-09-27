@@ -3,7 +3,7 @@
  * @author 教程组
  *
  * 状态变更全部经实体业务方法（recordFailedLogin / recordLogin），
- * 用例只负责「取行 → 恢复实体 → 校验密码 → 调实体 → 写回 → 发会话」。
+ * 用例只负责「读取行 → 恢复实体 → 校验密码 → 调用实体 → 写回 → 签发会话」。
  */
 import { AccountLockedError, InvalidCredentialsError } from '../domain/errors/index'
 import { SESSION_TTL_MS } from '../domain/constants'

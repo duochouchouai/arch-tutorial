@@ -93,13 +93,13 @@ describe('LoginUseCase', () => {
   it('递进式锁定：第二轮被锁时长升档到 15 分钟', async () => {
     const { time, userAccount, useCase } = build()
 
-    // 第一轮：攒满 5 次 → 锁 5 分钟
+    // 第一轮：累计 5 次 → 锁 5 分钟
     for (let i = 0; i < MAX_FAILED_ATTEMPTS; i += 1) {
       await useCase.execute({ username: 'alice', password: 'wrong' }).catch(() => undefined)
     }
     time.advance(lockDurationFor(1))
 
-    // 第二轮：再攒满 5 次 → 锁 15 分钟（档位上移）
+    // 第二轮：再次累计 5 次 → 锁 15 分钟（档位上移）
     const secondRoundStart = time.now()
     for (let i = 0; i < MAX_FAILED_ATTEMPTS; i += 1) {
       await useCase.execute({ username: 'alice', password: 'wrong' }).catch(() => undefined)

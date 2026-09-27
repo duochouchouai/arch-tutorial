@@ -34,7 +34,7 @@ export function useSession() {
     }
   }
 
-  /** 退出：先请后端吊销（失败也要清本地 —— 本地状态不能被网络绑架） */
+  /** 退出：先请后端吊销（失败也要清本地 —— 本地状态不应依赖网络可达性） */
   async function logout(): Promise<void> {
     const token = sessionStorage.load()
     try {

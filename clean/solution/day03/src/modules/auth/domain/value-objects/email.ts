@@ -2,8 +2,8 @@
  * @file Email 值对象 — 构造即校验
  * @author 教程组
  *
- * 值对象的三条铁律：
- * 1. 构造即校验：非法的 Email 实例在系统里**根本不存在**（不需要到处 if 检查 email 是否合法）；
+ * 值对象的三条规则：
+ * 1. 构造即校验：非法的 Email 实例在系统里**根本不存在**（不需要在调用处反复 if 检查 email 是否合法）；
  * 2. 不可变：private constructor + Object.freeze，外部只能读 value；
  * 3. 两个入口：create（不可信来源，全量校验）与 fromTrusted（DB 等已信任来源，不重复校验）。
  */

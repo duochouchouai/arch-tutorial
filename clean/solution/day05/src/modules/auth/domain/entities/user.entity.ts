@@ -3,7 +3,7 @@
  * @author 教程组
  *
  * 行形状（UserRowSchema）与账号**行为**（改密码、记登录、锁定）分居两文件：
- * 行为实体不碰 SQL，靠 toRow()/fromData() 与行数据桥接。
+ * 行为实体不涉及 SQL，通过 toRow()/fromData() 与行数据桥接。
  * （Day 06 会把行形状连同仓储抽成 users 模块，实体代码届时只改 import。）
  *
  * 纪律：

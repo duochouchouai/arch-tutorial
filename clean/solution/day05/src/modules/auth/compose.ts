@@ -9,10 +9,10 @@
  *   → 控制器（注入用例+校验器）
  *   → 路由
  *
- * 注意三个「外部件」都不是本模块自己造的：
+ * 注意三个「外部件」都不是本模块自行创建的：
  * - `db`：shared 的连接工厂产物，由 main.ts 打开后传进来；
  * - `timeProvider` / `idGenerator` / `eventBus`：shared 的公共件，同理。
- * 模块只组装「自己的」东西，跨模块依赖一律从构造函数进 —— 组合根是唯一知道谁实现谁的地方。
+ * 模块只组装「自己的」东西，跨模块依赖一律从构造函数进 —— 组合根是唯一装配端口实现的地方。
  */
 import type { DatabaseSync } from 'node:sqlite'
 import type { EventBus, IdGenerator, TimeProvider } from '../shared/index'

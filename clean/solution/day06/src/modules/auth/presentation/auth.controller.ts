@@ -7,7 +7,7 @@
  * 2. 交给 Validator 做「边界校验」（形状 + 业务规则 + 值对象）；
  * 3. 调用用例；
  * 4. 把结果装进响应信封。
- * 不写业务判断、不碰数据库 —— 在 legacy 里这三件事全糊在路由函数里。
+ * 不写业务判断、不碰数据库 —— 在 legacy 中这三件事都混在路由函数里。
  */
 import type { NextFunction, Request, Response } from 'express'
 import { UnauthorizedError, ok } from '../../shared/index'

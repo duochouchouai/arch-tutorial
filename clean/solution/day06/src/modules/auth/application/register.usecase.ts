@@ -3,12 +3,12 @@
  * @author 教程组
  *
  * 顺序即安全设计：
- * 1. 先验验证码（否则可以用注册接口白嫖「这个邮箱是否已注册」的信息）；
+ * 1. 先验验证码（否则可以用注册接口探测「该邮箱是否已注册」）；
  * 2. 再查重（用户名/邮箱），数据库唯一索引是最后防线；
  * 3. 哈希密码（基础设施）→ 实体工厂建账号 → 经**公共端口**落库；
- * 4. 发注册事件（副作用，失败不拖垮注册）。
+ * 4. 发注册事件（副作用，失败不影响注册）。
  *
- * 用例全程不写 SQL、不碰 bcrypt、不感知是 SQLite 还是 Postgres —— 只认端口。
+ * 用例全程不写 SQL、不涉及 bcrypt、不感知是 SQLite 还是 Postgres —— 只认端口。
  */
 import { EmailTakenError, UsernameTakenError } from '../domain/errors/index'
 import { CODE_PURPOSE_REGISTER } from './send-code.usecase'

@@ -3,7 +3,7 @@
  * @author 教程组
  *
  * 与用例单测互补：这里不换任何端口实现（除了 bcrypt 轮数走配置调低）。
- * 验证码通过白盒查库获取（注册码本来就只有"收邮件的人"能看到）。
+ * 验证码通过白盒查库获取（注册码本来就只有邮箱持有者能看到）。
  */
 import request from 'supertest'
 import type { Express } from 'express'
@@ -197,7 +197,7 @@ describe('递进式锁定（Day 07）', () => {
     expect(first.lockCount).toBe(1)
     expect(first.lockedUntil - first.lockedAt).toBeGreaterThan(4 * 60_000)
 
-    // 白盒：把锁定截止时间拨回过去 = 时间快进（e2e 用真实时钟，没法 advance）
+    // 白盒：把锁定截止时间调整到过去 = 模拟时间推进（e2e 使用真实时钟，无法 advance）
     db.prepare('UPDATE users SET locked_until = ?').run(Date.now() - 1)
     for (let i = 0; i < 5; i += 1) {
       await request(app).post('/auth/login').send({ username: 'alice', password: 'wrong-pass' }).expect(401)

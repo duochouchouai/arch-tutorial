@@ -6,6 +6,6 @@
  * 怎么发、发给谁、失败怎么办，都在实现（application/user-registered.publisher.ts）里收口。
  */
 export interface UserRegisteredPublisherPort {
-  /** 发布注册事件；失败只记日志，**绝不抛**（注册不能被副作用拖垮） */
+  /** 发布注册事件；失败只记日志，**不向上抛出**（副作用失败不影响注册主流程） */
   publish(userId: string): Promise<void>
 }

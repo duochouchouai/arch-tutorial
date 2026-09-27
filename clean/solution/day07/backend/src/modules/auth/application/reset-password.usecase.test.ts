@@ -55,7 +55,7 @@ describe('ResetPasswordUseCase', () => {
     expect(userAccount.rows.get('u1')?.passwordHash).toBe(`hashed:${NEW_PASSWORD}`)
     // 一次性：码用掉即删
     expect(await codeStore.find(CODE_PURPOSE_RESET, EMAIL)).toBeNull()
-    // 旧会话全灭，别人的会话不受影响
+    // 旧会话全部失效，别人的会话不受影响
     expect(await sessionStore.find('old-token-1')).toBeNull()
     expect(await sessionStore.find('old-token-2')).toBeNull()
     expect(await sessionStore.find('other-user-token')).not.toBeNull()

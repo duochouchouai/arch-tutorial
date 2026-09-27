@@ -8,7 +8,7 @@
  * 两个边界纪律：
  * 1. DB 读取是跨边界 —— 行数据一律经 UserRowSchema.parse() 再进领域，不做 `as` 断言；
  * 2. snake_case → camelCase 由 SQL 的 AS 别名完成，代码里不出现手写映射表
- *    （列名改了、别名没改，parse 会当场炸，而不是静默错位）。
+ *    （列名改了、别名没改，parse 会立即报错，而不是静默错位）。
  */
 import type { DatabaseSync } from 'node:sqlite'
 import type { UserAccountRepositoryPort } from '../domain/ports/index'

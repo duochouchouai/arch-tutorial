@@ -8,9 +8,9 @@
 import type { PublicUser } from '../schemas/index'
 export interface UserRegisteredPublisherPort {
   /**
-   * 发布注册事件；失败只记日志，**绝不抛**（注册不能被副作用拖垮）。
+   * 发布注册事件；失败只记日志，**不向上抛出**（副作用失败不影响注册主流程）。
    * 载荷带 username / email：订阅方（notifications）不必回查 users 模块
-   * ——「事件载荷要装够订阅方需要的数据」是事件契约的一部分。
+   * ——「事件载荷要覆盖订阅方所需的数据」是事件契约的一部分。
    */
   publish(user: PublicUser): Promise<void>
 }

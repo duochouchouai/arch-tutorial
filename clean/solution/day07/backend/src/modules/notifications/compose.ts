@@ -2,7 +2,7 @@
  * @file notifications 模块组合根
  * @author 教程组
  *
- * 装配即「订阅」：createNotificationsModule 被调用时，处理器就挂上了事件总线。
+ * 装配时完成「订阅」：createNotificationsModule 被调用时，处理器随即注册到事件总线。
  * auth 那边一行都不用改 —— 这正是 Day 06 把「发注册事件」独立成端口的目的。
  *
  * 依赖方向：notifications → auth（只 import auth/index 的事件类型）。

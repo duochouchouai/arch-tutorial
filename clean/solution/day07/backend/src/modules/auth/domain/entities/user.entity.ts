@@ -136,7 +136,7 @@ export class UserEntity {
     if (this.#failedAttempts >= MAX_FAILED_ATTEMPTS) {
       this.#lockCount += 1
       this.#lockedUntil = now + lockDurationFor(this.#lockCount)
-      // 锁定已生效：失败计数归零，下一轮从零攒 —— 解锁后再攒满 5 次就进入下一档
+      // 锁定已生效：失败计数归零，下一轮从零累计 —— 解锁后再次累计 5 次即进入下一档
       this.#failedAttempts = 0
     }
   }
@@ -153,7 +153,7 @@ export class UserEntity {
 
   /**
    * 重置密码（Day 07）：只收已哈希的密码。
-   * 改密视为「账号主人操作」：顺带解锁并清空失败计数 —— 否则被锁用户改完密码仍旧进不去。
+   * 改密视为「账号主人操作」：同时解锁并清空失败计数 —— 否则被锁定的用户修改密码后仍无法登录。
    */
   changePassword(passwordHash: string): void {
     this.#passwordHash = passwordHash

@@ -3,7 +3,7 @@
  * @author 教程组
  *
  * 与用例单测互补：这里不换任何端口实现（除了 bcrypt 轮数走配置调低）。
- * 验证码通过白盒查库获取（注册码本来就只有"收邮件的人"能看到）。
+ * 验证码通过白盒查库获取（注册码本来就只有邮箱持有者能看到）。
  */
 import request from 'supertest'
 import type { Express } from 'express'

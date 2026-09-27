@@ -51,7 +51,7 @@ describe('errorHandler', () => {
     expect(res.status).toBe(500)
     expect(res.body).toEqual({ success: false, message: '服务器内部错误' })
     expect(JSON.stringify(res.body)).not.toContain('SQLITE')
-    expect(spy).toHaveBeenCalled() // 全量现场进日志，不进响应
+    expect(spy).toHaveBeenCalled() // 完整上下文只进日志，不进响应
     spy.mockRestore()
   })
 })

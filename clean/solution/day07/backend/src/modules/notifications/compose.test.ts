@@ -8,7 +8,7 @@ import { InMemoryEventBus } from '../shared/index'
 import { createNotificationsModule } from './compose'
 
 describe('createNotificationsModule', () => {
-  it('装配即订阅：注册事件一发布，欢迎邮件就发出去（auth 侧零改动）', async () => {
+  it('装配时完成订阅：注册事件一发布，欢迎邮件就发出去（auth 侧零改动）', async () => {
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined)
     const eventBus = new InMemoryEventBus()
     createNotificationsModule({ eventBus })

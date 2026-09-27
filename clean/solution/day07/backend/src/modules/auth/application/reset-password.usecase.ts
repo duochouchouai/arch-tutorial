@@ -5,7 +5,7 @@
  * 顺序即安全设计：
  * 1. 先验码并**立刻消费**（一次性，重复提交同一枚码直接失败）；
  * 2. 找不到账号也抛「验证码无效」——不复用「账号不存在」这类可枚举的差异；
- * 3. 改密经实体的 changePassword()（业务方法顺带解锁、清失败计数）；
+ * 3. 改密经实体的 changePassword()（业务方法同时解锁、清空失败计数）；
  * 4. 吊销该用户的所有会话：密码都换了，旧 token 必须立刻失效。
  */
 import { InvalidCodeError } from '../domain/errors/index'
@@ -38,7 +38,7 @@ export class ResetPasswordUseCase {
       throw new InvalidCodeError()
     }
 
-    // 3) 改密（实体业务方法：顺带解锁 + 清失败计数）
+    // 3) 改密（实体业务方法：同时解锁 + 清空失败计数）
     const user = UserEntity.fromData(row, timeProvider)
     user.changePassword(await passwordHasher.hash(input.password.value))
     await userAccount.update(user.toRow())

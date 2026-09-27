@@ -29,7 +29,7 @@ export class FakeTimeProvider implements TimeProvider {
     return this.#nowMs
   }
 
-  /** 时间旅行：把「30 分钟后解锁」变成一行测试代码 */
+  /** 用假时钟控制时间：把「30 分钟后解锁」变成一行测试代码 */
   advance(ms: number): void {
     this.#nowMs += ms
   }
@@ -44,7 +44,7 @@ export class FakeIdGenerator implements IdGenerator {
   }
 }
 
-/** 假哈希：不做真 bcrypt（慢），但保持「明文与哈希一一对应」的可断言行为 */
+/** 假哈希：不执行真实 bcrypt（较慢），但保持「明文与哈希一一对应」的可断言行为 */
 export class FakePasswordHasher implements PasswordHasherPort {
   async hash(plain: string): Promise<string> {
     return `hashed:${plain}`
