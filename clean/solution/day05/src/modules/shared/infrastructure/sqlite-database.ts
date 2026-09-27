@@ -5,7 +5,7 @@
  * 连接本身是共享的（一个进程一个文件一个连接），但**表不是**：
  * 每张表的 DDL 只出现在拥有者模块的 infrastructure 里（见架构守卫测试第 3 条）。
  *
- * 使用 Node 内置的 node:sqlite（Node 24+ 无需 flag；Node 22.5+ 需 --experimental-sqlite）。
+ * 使用 Node 内置的 node:sqlite（Node 22.13+ 无需 flag；22.5–22.12 需 --experimental-sqlite）。
  */
 import { DatabaseSync } from 'node:sqlite'
 
