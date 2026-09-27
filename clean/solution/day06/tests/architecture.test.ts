@@ -5,7 +5,7 @@
  * 三条纪律（与 docs/conventions.md、GUIDE-day06 对拍）：
  * 1. 跨模块 import 只能命中对方 index.ts —— 模块出口收敛，内部件不出模块；
  * 2. domain/ 不得依赖 application / infrastructure / presentation，
- *    也不得 import npm 包（zod 仅豁免 domain/schemas/ 与 domain/validators/）；
+ *    也不得 import npm 包（zod 仅豁免 domain/schemas/、domain/validators/ 与 domain/events/）；
  * 3. users 表的 DDL 与全部写语句（INSERT / UPDATE / DELETE）只允许出现在
  *    users/infrastructure/ —— 表归属。
  *
@@ -90,7 +90,7 @@ describe('架构守卫', () => {
     expect(violations).toEqual([])
   })
 
-  it('第 2 条：domain 层不依赖外层，不 import npm（zod 限 schemas/validators）', () => {
+  it('第 2 条：domain 层不依赖外层，不 import npm（zod 限 schemas/validators/events）', () => {
     const violations: string[] = []
     for (const file of files) {
       if (!file.split(path.sep).includes('domain')) {
