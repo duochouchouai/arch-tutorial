@@ -11,7 +11,7 @@
 ## 起点
 
 ```bash
-cp -r solution/day06/* your-day07/     # 以 Day 06 终态为基线（已含 22 文件 / 85 测试的绿色门禁）
+cp -r solution/day06/* your-day07/     # 以 Day 06 终态为基线（已含 23 文件 / 90 测试的绿色门禁）
 cd your-day07 && npm install && npm run gate    # 先确认基线是绿的
 ```
 
@@ -173,7 +173,7 @@ cd solution/day07/uniapp-login && npm install && npm run gate
 
 | 项 | 命令 | 期望 |
 |---|---|---|
-| 后端门禁 | `cd day07/backend && npm run gate` | 27 文件通过 + 1 跳过（PG 集成）/ 109 测试通过 |
+| 后端门禁 | `cd day07/backend && npm run gate` | 27 文件通过 + 1 跳过（PG 集成）/ 109 测试通过 + 3 跳过 |
 | 前端门禁 | `cd day07/uniapp-login && npm run gate` | 3 文件 / 15 测试通过 |
 | 架构守卫 | 后端 `npm test` 里的 `architecture.test.ts` | 3 条规则全绿，无新增豁免 |
 | 换库验证 | `.env` 里设 `DATABASE_URL=postgres://…` 后 `npm test`（可选） | 集成测试从「跳过」变「通过」 |

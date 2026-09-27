@@ -14,7 +14,7 @@ day07/
 # 后端
 cd backend && npm install
 cp .env.example .env                           # 本机配置写 .env（永不进仓库）；默认零配置可跑
-npm run gate                                   # 27 文件通过 + 1 文件跳过（PG 集成）/ 109 测试
+npm run gate                                   # 27 文件通过 + 1 文件跳过（PG 集成）/ 109 测试通过 + 3 跳过
 npm start                                      # http://localhost:3000
 
 # 可选：PostgreSQL 集成测试 —— 在 .env 里取消 DATABASE_URL 注释并填本机连接串后
