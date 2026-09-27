@@ -3,7 +3,7 @@
 ## 1. 顶层装配
 
 ```
-                        main.ts（组合根：唯一知道「谁是谁的实现」）
+                        main.ts（组合根：唯一的装配点，各端口与实现的对应关系只在此处确定）
                           │
         ┌─────────────────┼──────────────────┬───────────────────┐
         ▼                 ▼                  ▼                   ▼
@@ -27,7 +27,7 @@ const eventBus = new InMemoryEventBus()
 
 const users = createUsersModule({ db, databaseUrl: config.databaseUrl })
 const auth = createAuthModule({ db, userAccount: users.account, timeProvider, idGenerator, eventBus, bcryptRounds })
-createNotificationsModule({ eventBus })     // 装配即订阅
+createNotificationsModule({ eventBus })     // 装配时完成订阅
 ```
 
 ## 2. 模块内部分层
@@ -69,7 +69,7 @@ presentation ──► application ──► domain ◄── infrastructure
 | `compose.ts` | ✓ | ✓ | ✓ | ✓ | ✓（仅 `index`） | ✗ | ✓ |
 | `main.ts` | ✗ | ✗ | ✗ | ✗ | ✓（仅 `index` + `config`） | ✗ | ✓ |
 
-三条硬规则由 `tests/architecture.test.ts` 守卫：
+以下三条硬性规则由 `tests/architecture.test.ts` 守卫：
 
 1. 跨模块 import 必须解析到对方 `index.ts`（守卫规则 ①）；
 2. `domain/**` 的 import 只能是相对路径 + zod 白名单（守卫规则 ②）；
@@ -100,12 +100,12 @@ HTTP POST /auth/login
   └─ 任何环节抛 AppError → errorHandler → { success:false, message, fieldErrors? }（按 statusCode）
 ```
 
-## 5. 跨模块协作的三种合法姿势
+## 5. 跨模块协作的三种合法方式
 
-| 姿势 | 例子 | 契约 |
+| 方式 | 例子 | 契约 |
 |---|---|---|
 | 注入公共端口（同步调用） | auth → users：查账号、写账号 | `UserAccountPublicPort` |
 | 注入共享端口（同步调用） | 所有模块 → shared：时钟、id、总线 | `TimeProvider` / `IdGenerator` / `EventBus` |
-| 事件（异步、单向） | auth → notifications：注册事件 | `UserRegisteredEvent`（类型从 auth 的 `index` 出） |
+| 事件（异步、单向） | auth → notifications：注册事件 | `UserRegisteredEvent`（类型由 auth 的 `index` 导出） |
 
-非法姿势：直接 import 对方内部件、直接读写对方表、把对方的实现 `new` 在自己模块里。
+非法方式：直接 import 对方内部件、直接读写对方表、在本模块内 `new` 对方的实现。
