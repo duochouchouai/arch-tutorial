@@ -1,5 +1,13 @@
 # 屎山代码演进教程 🏔️💩 → 🏗️✨
 
+![Node.js ≥ 22](https://img.shields.io/badge/Node.js-%E2%89%A5%2022-339933?logo=nodedotjs&logoColor=white&style=flat-square)
+![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white&style=flat-square)
+![tests 422 passing](https://img.shields.io/badge/tests-422%20passing-brightgreen?style=flat-square)
+[![architecture enforced](https://img.shields.io/badge/architecture-enforced%20by%20tests-blue?style=flat-square)](clean/docs/conventions.md)
+![db SQLite | PostgreSQL](https://img.shields.io/badge/db-SQLite%20%7C%20PostgreSQL-003B57?logo=sqlite&logoColor=white&style=flat-square)
+![tutorial 6 days + 1 capstone](https://img.shields.io/badge/tutorial-6%20days%20%2B%201%20capstone-orange?style=flat-square)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-blueviolet?style=flat-square)](exercise/README.md)
+
 一个用于内部培训的教程项目，通过**对比**展示「vibe coding 堆出来的屎山」和「多模块清洁架构」的差异。
 
 同一个业务（登录系统）写两遍：
@@ -10,7 +18,7 @@
 ## 目录结构
 
 ```
-├── legacy/                       ← 屎山演进（vibe coding，供「体验反例」）
+├── legacy/                       ← 屎山演进（“vibe coding”，供「体验反例」）
 │   └── day01..06/                每个 day 独立可跑（node day*.js）
 │
 ├── clean/                        ← 清洁架构手打教程
@@ -99,10 +107,11 @@ npm run gate:all                # 所有 solution 的门禁，一次跑完 8 个
 
 | 目录 | 定位 | 改动方式 |
 |---|---|---|
-| `legacy/` | 反面教材（vibe coding 的演进结果） | 不直接改；有建议先讨论，由维护者统一修改 |
-| `clean/` | 教程正文与参考答案（GUIDE + solution） | 同上 |
+| `legacy/` | 反面教材（屎山代码的演进结果） | 原则上不改动；有建议先讨论，由维护者统一修改 |
+| `clean/` | 教程的正文与参考答案（GUIDE + solution） | 同上 |
 | `exercise/` | 成员练习（详细规范见 `exercise/README.md`） | 各自只写自己的目录，提交到 `exercise/<名字>` 分支 |
 
-- **`legacy/` 与 `clean/` 面向全体学员，请勿直接改动或推送**：发现错误或有改进建议，先开 Issue 或在群里提出，由维护者确认后统一修改；
+- **`legacy/` 与 `clean/` 面向全体学员，请勿直接改动或推送**：发现错误或有改进建议，先开 Issue 
+PR 或在开发群里提出，由维护者确认后统一修改；
 - 练习按 `exercise/README.md` 的规范提交到个人分支（`exercise/<名字>`），不直接推送 `develop`；`develop` 由维护者合并；
-- 提交信息：练习用 `dayNN: <简述>`，其他改动参照仓库现有风格（`fix:` / `feat:` / `docs:` / `refactor:`）。
+- 建议的提交信息：练习用 `dayNN: <简述>`，其他改动参照仓库现有风格（`fix:` / `feat:` / `docs:` / `refactor:`）。
