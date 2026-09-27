@@ -94,3 +94,15 @@ npm run gate:all                # 所有 solution 的门禁，一次跑完 8 个
 - **SSOT**：形状只有一份（zod + `z.infer`），规则住在 `validators/`；
 - **判据归属 / 表归属**：判断在领域层，表的读写只属于拥有者模块；
 - **约定可执行**：每条纪律都有测试或检查盯着 —— 写在文档里的规则等于没有规则。
+
+## 协作规范
+
+| 目录 | 定位 | 改动方式 |
+|---|---|---|
+| `legacy/` | 反面教材（vibe coding 的演进结果） | 不直接改；有建议先讨论，由维护者统一修改 |
+| `clean/` | 教程正文与参考答案（GUIDE + solution） | 同上 |
+| `exercise/` | 成员练习（详细规范见 `exercise/README.md`） | 各自只写自己的目录，提交到 `exercise/<名字>` 分支 |
+
+- **`legacy/` 与 `clean/` 面向全体学员，请勿直接改动或推送**：发现错误或有改进建议，先开 Issue 或在群里提出，由维护者确认后统一修改；
+- 练习按 `exercise/README.md` 的规范提交到个人分支（`exercise/<名字>`），不直接推送 `develop`；`develop` 由维护者合并；
+- 提交信息：练习用 `dayNN: <简述>`，其他改动参照仓库现有风格（`fix:` / `feat:` / `docs:` / `refactor:`）。
