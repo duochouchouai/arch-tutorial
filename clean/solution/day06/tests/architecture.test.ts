@@ -6,7 +6,8 @@
  * 1. 跨模块 import 只能命中对方 index.ts —— 模块出口收敛，内部件不出模块；
  * 2. domain/ 不得依赖 application / infrastructure / presentation，
  *    也不得 import npm 包（zod 仅豁免 domain/schemas/ 与 domain/validators/）；
- * 3. users 表的建表与写语句只允许出现在 users/infrastructure/ —— 表归属。
+ * 3. users 表的 DDL 与全部写语句（INSERT / UPDATE / DELETE）只允许出现在
+ *    users/infrastructure/ —— 表归属。
  *
  * 说明：这是文本级启发式守卫（读源码、解析 import 语句做路径归一）。
  * 真实仓库的同款守卫可升级为 AST 级；思路一致 —— 规则要被机器执行，而不是写在文档里。
@@ -113,7 +114,7 @@ describe('架构守卫', () => {
         const own = moduleNameOf(file)
         const target = moduleNameOf(resolved)
         if (target !== null && target !== own) {
-          continue // 跨模块引用交给第 1 条校验（且必须 import type）
+          continue // 跨模块引用交给第 1 条校验（必须命中对方 index）
         }
         const parts = path.relative(MODULES_DIR, resolved).split(path.sep)
         const layer = parts[1]
@@ -125,8 +126,20 @@ describe('架构守卫', () => {
     expect(violations).toEqual([])
   })
 
-  it('第 3 条：users 表的建表与写语句只出现在 users/infrastructure/', () => {
-    const writePattern = /(INSERT\s+INTO\s+users|UPDATE\s+users\b|CREATE\s+TABLE\s+IF\s+NOT\s+EXISTS\s+users\b)/i
+  it('第 3 条：users 表的 DDL 与全部写语句只出现在 users/infrastructure/', () => {
+    const writePattern =
+      /(INSERT\s+INTO\s+users\b|UPDATE\s+users\b|DELETE\s+FROM\s+users\b|(CREATE|ALTER|DROP)\s+TABLE\s+(IF\s+(NOT\s+)?EXISTS\s+)?users\b)/i
+    // 守卫自检：正则确实覆盖各类写语句（否则规则会静默失效）
+    for (const sample of [
+      'INSERT INTO users (id) VALUES (?)',
+      'UPDATE users SET email = ?',
+      'DELETE FROM users WHERE id = ?',
+      'CREATE TABLE IF NOT EXISTS users (id TEXT)',
+      'ALTER TABLE users ADD COLUMN x TEXT',
+      'DROP TABLE IF EXISTS users',
+    ]) {
+      expect(writePattern.test(sample)).toBe(true)
+    }
     const violations: string[] = []
     for (const file of listTsFiles(SRC_DIR)) {
       if (writePattern.test(readFileSync(file, 'utf8'))) {
