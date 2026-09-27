@@ -19,12 +19,12 @@ exercise/
 - 每人一个目录，**互不重叠**；
 - 每天的成果应为**独立项目**：具备自己的 `package.json` / `tsconfig.json` / `vitest.config.ts`，能够执行 `npm install && npm run gate`（工程配置与 `clean/solution/dayNN` 保持一致）；
 - 工程脚手架文件（`package.json`、`tsconfig.json`、`eslint.config.mjs`、`.prettierrc`、`vitest.config.ts`、`.env.example`）：**Day 01 的按 GUIDE 自行输入**（这是第一天的考查内容）；Day 02 起可直接沿用前一天的配置。但 `src/` 与 `tests/` 中的代码必须自行输入；
-- `legacy/` 与 `clean/` 属于教程与参考答案：请勿在其中存放个人练习，也不要直接改动其中的文件。如有修正或改进建议，请参见根目录 README 的「协作规范」一节。
+- `legacy/` 与 `clean/` 属于教程与参考答案：请勿在其中存放个人练习，也不要直接改动其中的文件。如有修正或改进建议，请参见根目录 README 的「协作规范」一节。（欢迎批评指正）
 
 ## 提交规范
 
 - 分支：从 `develop` 切出 `exercise/<你的名字>`，仅推送自己的分支，不要直接推送 `develop`；
-- 提交信息：`dayNN: <简短说明>`，推荐使用英文（例：`day05: ports + usecases wired, e2e still red on session`）；**测试未通过时也可以提交**——记录失败的位置与原因，比虚假的通过记录更有价值；
+- 建议的提交信息：`dayNN: <简短说明>`，推荐使用英文（例：`day05: ports + usecases wired, e2e still red on session`）；**测试未通过时也可以提交**——记录失败的位置与原因，比虚假的通过记录更有价值；
 - 提交前确认：不包含 `.env`、`*.db`、`node_modules`（根目录 `.gitignore` 已统一处理，也请大家自行核对）。
 
 ## 每一天的验收（自检清单）
