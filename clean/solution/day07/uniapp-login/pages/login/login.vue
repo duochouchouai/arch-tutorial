@@ -3,7 +3,9 @@
     <view class="prompt">$ ssh login@arch-tutorial</view>
     <view class="prompt">Password:</view>
     <input v-model="username" placeholder="username" class="cmd-input" />
+    <text v-if="fieldErrors.username" class="cmd-field-error">{{ fieldErrors.username }}</text>
     <input v-model="password" type="password" placeholder="········" class="cmd-input" />
+    <text v-if="fieldErrors.password" class="cmd-field-error">{{ fieldErrors.password }}</text>
     <button @click="handleLogin" :disabled="loading" class="cmd-btn">$ login</button>
     <text v-if="error" class="cmd-error">{{ error }}</text>
     <navigator url="/pages/register/register" class="cmd-link">$ register --new-account</navigator>
@@ -21,7 +23,7 @@ import { useLogin } from '../../src/application/useLogin';
 
 const username = ref('');
 const password = ref('');
-const { loading, error, login } = useLogin();
+const { loading, error, fieldErrors, login } = useLogin();
 
 async function handleLogin() {
   const ok = await login(username.value, password.value);
@@ -71,6 +73,12 @@ async function handleLogin() {
   color: #cc0000;
   font-size: 26rpx;
   margin-bottom: 24rpx;
+}
+.cmd-field-error {
+  display: block;
+  color: #cc0000;
+  font-size: 24rpx;
+  margin: -12rpx 0 20rpx;
 }
 .cmd-ok {
   display: block;

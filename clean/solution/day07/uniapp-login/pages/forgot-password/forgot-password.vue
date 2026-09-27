@@ -2,6 +2,7 @@
   <view class="terminal">
     <view class="prompt">$ passwd --forgot</view>
     <input v-model="email" placeholder="email" class="cmd-input" />
+    <text v-if="fieldErrors.email" class="cmd-field-error">{{ fieldErrors.email }}</text>
     <button @click="handleForgot" :disabled="loading" class="cmd-btn">$ send-reset-code</button>
     <text v-if="sent" class="cmd-ok">[OK] 若该邮箱已注册，验证码已发送（未注册也返回成功：不透露账号存在性）</text>
     <navigator v-if="sent" url="/pages/reset-password/reset-password" class="cmd-link">
@@ -21,7 +22,7 @@ import { ref } from 'vue';
 import { useForgotPassword } from '../../src/application/useForgotPassword';
 
 const email = ref('');
-const { loading, error, sent, forgotPassword } = useForgotPassword();
+const { loading, error, fieldErrors, sent, forgotPassword } = useForgotPassword();
 
 async function handleForgot() {
   await forgotPassword(email.value);
@@ -68,6 +69,12 @@ async function handleForgot() {
   color: #cc0000;
   font-size: 26rpx;
   margin-bottom: 24rpx;
+}
+.cmd-field-error {
+  display: block;
+  color: #cc0000;
+  font-size: 24rpx;
+  margin: -12rpx 0 20rpx;
 }
 .cmd-ok {
   display: block;

@@ -2,11 +2,15 @@
   <view class="terminal">
     <view class="prompt">$ useradd --create</view>
     <input v-model="email" placeholder="email" class="cmd-input" />
+    <text v-if="fieldErrors.email" class="cmd-field-error">{{ fieldErrors.email }}</text>
     <button @click="handleSendCode" :disabled="sending" class="cmd-btn">$ send-code --email</button>
     <text v-if="codeSent" class="cmd-ok">[OK] 验证码已发送（若收不到请检查邮箱；开发环境见服务端控制台）</text>
     <input v-model="code" placeholder="code (6 digits)" class="cmd-input" />
+    <text v-if="fieldErrors.code" class="cmd-field-error">{{ fieldErrors.code }}</text>
     <input v-model="username" placeholder="username" class="cmd-input" />
+    <text v-if="fieldErrors.username" class="cmd-field-error">{{ fieldErrors.username }}</text>
     <input v-model="password" type="password" placeholder="password" class="cmd-input" />
+    <text v-if="fieldErrors.password" class="cmd-field-error">{{ fieldErrors.password }}</text>
     <button @click="handleRegister" :disabled="loading || !codeSent" class="cmd-btn">$ useradd --confirm</button>
     <text v-if="error" class="cmd-error">{{ error }}</text>
     <navigator url="/pages/login/login" class="cmd-link">$ ssh login@arch-tutorial</navigator>
@@ -27,7 +31,7 @@ const email = ref('');
 const code = ref('');
 const username = ref('');
 const password = ref('');
-const { loading, sending, error, codeSent, sendCode, register } = useRegister();
+const { loading, sending, error, fieldErrors, codeSent, sendCode, register } = useRegister();
 
 async function handleSendCode() {
   await sendCode(email.value);
@@ -81,6 +85,12 @@ async function handleRegister() {
   color: #cc0000;
   font-size: 26rpx;
   margin-bottom: 24rpx;
+}
+.cmd-field-error {
+  display: block;
+  color: #cc0000;
+  font-size: 24rpx;
+  margin: -12rpx 0 20rpx;
 }
 .cmd-ok {
   display: block;

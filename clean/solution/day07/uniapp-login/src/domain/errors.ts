@@ -19,8 +19,15 @@ export class ApiError extends Error {
     this.fieldErrors = fieldErrors
   }
 
-  /** 取某字段的第一条错误信息（页面逐字段提示用） */
-  fieldError(field: string): string | undefined {
-    return this.fieldErrors?.[field]?.[0]
+  /** 字段 → 第一条错误信息（页面逐字段渲染用；useXxx 把它放进响应式 ref） */
+  firstErrors(): Record<string, string> {
+    const result: Record<string, string> = {}
+    for (const [field, messages] of Object.entries(this.fieldErrors ?? {})) {
+      const first = messages[0]
+      if (first !== undefined) {
+        result[field] = first
+      }
+    }
+    return result
   }
 }

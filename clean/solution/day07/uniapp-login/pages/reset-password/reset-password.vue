@@ -2,8 +2,11 @@
   <view class="terminal">
     <view class="prompt">$ passwd --reset</view>
     <input v-model="email" placeholder="email" class="cmd-input" />
+    <text v-if="fieldErrors.email" class="cmd-field-error">{{ fieldErrors.email }}</text>
     <input v-model="code" placeholder="code (6 digits)" class="cmd-input" />
+    <text v-if="fieldErrors.code" class="cmd-field-error">{{ fieldErrors.code }}</text>
     <input v-model="password" type="password" placeholder="new password" class="cmd-input" />
+    <text v-if="fieldErrors.password" class="cmd-field-error">{{ fieldErrors.password }}</text>
     <button @click="handleReset" :disabled="loading" class="cmd-btn">$ passwd --confirm</button>
     <text v-if="done" class="cmd-ok">[OK] 密码已重置，旧会话已失效，请重新登录</text>
     <text v-if="error" class="cmd-error">{{ error }}</text>
@@ -25,7 +28,7 @@ import { useResetPassword } from '../../src/application/useResetPassword';
 const email = ref('');
 const code = ref('');
 const password = ref('');
-const { loading, error, done, resetPassword } = useResetPassword();
+const { loading, error, fieldErrors, done, resetPassword } = useResetPassword();
 
 async function handleReset() {
   await resetPassword(email.value, code.value, password.value);
@@ -72,6 +75,12 @@ async function handleReset() {
   color: #cc0000;
   font-size: 26rpx;
   margin-bottom: 24rpx;
+}
+.cmd-field-error {
+  display: block;
+  color: #cc0000;
+  font-size: 24rpx;
+  margin: -12rpx 0 20rpx;
 }
 .cmd-ok {
   display: block;

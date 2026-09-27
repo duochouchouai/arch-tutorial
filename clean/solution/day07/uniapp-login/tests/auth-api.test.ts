@@ -80,7 +80,7 @@ describe('authApi', () => {
     if (error instanceof ApiError) {
       expect(error.statusCode).toBe(400)
       expect(error.message).toBe('输入校验未通过')
-      expect(error.fieldError('code')).toBe('验证码不正确')
+      expect(error.firstErrors()).toEqual({ code: '验证码不正确' })
     }
   })
 

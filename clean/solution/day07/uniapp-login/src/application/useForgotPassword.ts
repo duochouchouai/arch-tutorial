@@ -6,19 +6,23 @@ import { ref } from 'vue'
 import { ApiError } from '../domain/errors'
 import { ForgotPasswordInputSchema } from '../domain/schemas'
 import { authApi } from '../infrastructure/auth-api'
+import { fieldErrorsFromError, fieldErrorsFromIssues } from './field-errors'
 
 export function useForgotPassword() {
   const loading = ref(false)
   const error = ref('')
+  const fieldErrors = ref<Record<string, string>>({})
   const sent = ref(false)
 
   async function forgotPassword(email: string): Promise<boolean> {
     loading.value = true
     error.value = ''
+    fieldErrors.value = {}
 
     const parsed = ForgotPasswordInputSchema.safeParse({ email })
     if (!parsed.success) {
       error.value = parsed.error.issues[0]?.message ?? '请输入正确的邮箱'
+      fieldErrors.value = fieldErrorsFromIssues(parsed.error.issues)
       loading.value = false
       return false
     }
@@ -30,11 +34,12 @@ export function useForgotPassword() {
       return true
     } catch (e) {
       error.value = e instanceof ApiError ? e.message : '网络异常，请稍后重试'
+      fieldErrors.value = fieldErrorsFromError(e)
       return false
     } finally {
       loading.value = false
     }
   }
 
-  return { loading, error, sent, forgotPassword }
+  return { loading, error, fieldErrors, sent, forgotPassword }
 }

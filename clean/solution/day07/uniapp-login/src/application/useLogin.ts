@@ -7,6 +7,7 @@ import { ApiError } from '../domain/errors'
 import { LoginInputSchema } from '../domain/schemas'
 import { authApi } from '../infrastructure/auth-api'
 import { sessionStorage } from '../infrastructure/session-storage'
+import { fieldErrorsFromError, fieldErrorsFromIssues } from './field-errors'
 
 export function useLogin() {
   const loading = ref(false)
@@ -21,6 +22,7 @@ export function useLogin() {
     const parsed = LoginInputSchema.safeParse({ username, password })
     if (!parsed.success) {
       error.value = parsed.error.issues[0]?.message ?? '输入不合法'
+      fieldErrors.value = fieldErrorsFromIssues(parsed.error.issues)
       loading.value = false
       return false
     }
@@ -30,12 +32,9 @@ export function useLogin() {
       sessionStorage.save(result.token)
       return true
     } catch (e) {
-      if (e instanceof ApiError) {
-        error.value = e.message
-        // 423 = 锁定中：message 由后端给（含解锁提示），页面原样展示
-      } else {
-        error.value = '网络异常，请稍后重试'
-      }
+      // 423 = 锁定中：message 由后端给（含解锁提示），页面原样展示
+      error.value = e instanceof ApiError ? e.message : '网络异常，请稍后重试'
+      fieldErrors.value = fieldErrorsFromError(e)
       return false
     } finally {
       loading.value = false
