@@ -8,9 +8,9 @@
 
 ## 📖 概念
 
-### 1. 同一个形状，v1 写了三遍
+### 1. 同一个形状，legacy 写了三遍
 
-| 位置 | v1 的写法 |
+| 位置 | legacy 的写法 |
 |------|-----------|
 | 路由校验 | `auth-schema.ts` 里的 zod schema（带 `.min()`、`.email()` 等规则） |
 | 用例入参 | `login-user.ts` 里的 `interface LoginInput` 手写类型 |
@@ -78,7 +78,7 @@ export type ValidatedRegister = z.infer<typeof ValidatedRegisterSchema>
 // schemas 的 issues 聚合成字段级错误：{ email: ['邮箱格式不正确'], ... }
 throw new ValidationError(fieldErrors as FieldErrors)
 ```
-从今天起，**任何**入口校验都从这里走；手写 if/else 收集错误字符串是 v1 的屎山形态。
+从今天起，**任何**入口校验都从这里走；手写 if/else 收集错误字符串是 legacy 的屎山形态。
 
 ---
 
@@ -142,4 +142,4 @@ cd solution/day04 && npm install && npm run gate
 
 - 真实仓库的 `domain/schemas/` 就是 SSOT：`api/` 放形状、`validator/` 放校验输出、`deps/` 放用例依赖契约（Day 05 出场）；
 - 「定义与校验分离」在真实仓库的收益是灰度发布：形状先行（先加后发），规则可回滚；
-- 校验器的返回值永远是「值对象化」的：这是 v1 → v2 最直观的进步之一。
+- 校验器的返回值永远是「值对象化」的：这是 legacy → clean 最直观的进步之一。

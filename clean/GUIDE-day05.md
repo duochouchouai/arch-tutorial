@@ -9,10 +9,10 @@
 
 ## 📖 概念
 
-### 1. v1 的用例里藏着 SQL 和 bcrypt
+### 1. legacy 的用例里藏着 SQL 和 bcrypt
 
 ```ts
-// v1 application/login-user.ts（缩写）
+// legacy application/login-user.ts（缩写）
 const row = await db.get('SELECT * FROM users WHERE username = ?', [username])  // ✗ SQL
 const ok = await bcrypt.compare(password, row.password_hash)                    // ✗ 算法
 if (ok) { row.failed_attempts = 0; await db.run('UPDATE users ...') }           // ✗ 表结构
@@ -88,7 +88,7 @@ export function assertCodeValid(stored: StoredCode | null, input: Code, now: num
 
 ### 6. 事务边界与「代码生成不用 Math.random」
 
-- 会话 token / 验证码都经 `IdGenerator` / `CodeGenerator` 端口（密码学随机源），v1 用 `Math.random()` —— 可直接猜测；
+- 会话 token / 验证码都经 `IdGenerator` / `CodeGenerator` 端口（密码学随机源），legacy 用 `Math.random()` —— 可直接猜测；
 - 本阶段没有跨表事务（注册写 users + 消费验证码 + 发事件）—— 教程简化，真实仓库用 outbox 保证「事件不丢」，见 Day 06/07 说明。
 
 ---

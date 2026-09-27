@@ -10,10 +10,10 @@
 
 ### 1. 「一段字符串」和「一个邮箱」不是同一种东西
 
-v1 的注册校验长这样（`presentation/auth-schema.ts` 里的 zod schema + `auth-controller.ts` 里的 if/else）：
+legacy 的注册校验长这样（`presentation/auth-schema.ts` 里的 zod schema + `auth-controller.ts` 里的 if/else）：
 
 ```ts
-// v1：形状、格式、强度全糊在一起；错误用手拼字符串
+// legacy：形状、格式、强度全糊在一起；错误用手拼字符串
 if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
   errors.push('邮箱格式不正确')
 }

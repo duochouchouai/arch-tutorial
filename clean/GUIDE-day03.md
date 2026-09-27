@@ -10,20 +10,20 @@
 
 ### 1. 实体不是「带类型的 JSON」
 
-v1 的 `domain/user.ts`：
+legacy 的 `domain/user.ts`：
 
 ```ts
-export interface User {                 // v1：一堆公开字段
+export interface User {                 // legacy：一堆公开字段
   id: number
   username: string
   failedAttempts: number
   lockedUntil: string | null
 }
 ```
-「锁定」这件事在 v1 里以「谁都能改字段」的形式散布在用例中：
+「锁定」这件事在 legacy 里以「谁都能改字段」的形式散布在用例中：
 
 ```ts
-// v1 application/login-user.ts 里的片段
+// legacy application/login-user.ts 里的片段
 user.failedAttempts += 1
 if (user.failedAttempts >= 5) {
   user.lockedUntil = new Date(Date.now() + 30 * 60 * 1000).toISOString()

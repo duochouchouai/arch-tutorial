@@ -9,10 +9,10 @@
 
 ## 📖 概念：为什么第一天就要「骨架 + 组合根」
 
-v1 的目录长这样：
+legacy 的目录长这样：
 
 ```
-login-v1/src/
+legacy/src/
 ├── application/      # 用例（但里面有 SQL）
 ├── domain/           # 实体（但 import 了 bcrypt）
 ├── infrastructure/   # 仓储
@@ -26,10 +26,10 @@ login-v1/src/
 2. 装配散落在路由文件和 index.ts 里 —— 想换实现要翻全仓库；
 3. 没有守卫 —— 三个月后没人知道哪条纪律是硬约束。
 
-v2 的第一天不做业务，只立两样东西：**多模块的目录形状** 和 **唯一的组合根**。
+clean 的第一天不做业务，只立两样东西：**多模块的目录形状** 和 **唯一的组合根**。
 
 ```
-login-v2/solution/day01/src/
+clean/solution/day01/src/
 ├── config/index.ts          # 环境变量 → Config（唯一校验点）
 ├── main.ts                  # 组合根：装配一切 + HTTP 挂载
 └── modules/
@@ -72,7 +72,7 @@ Day 03 起你会看到 `FakeTimeProvider.advance()` 一行代码完成时间旅�
 
 zod 校验环境变量，导出 `ConfigSchema` / `Config` / `loadConfig(env = process.env)`：
 
-- `port`（`z.coerce.number()`，默认 3000）、`dbPath`（默认 `login-v2.db`）、`bcryptRounds`（4-15，默认 10）、`nodeEnv`；
+- `port`（`z.coerce.number()`，默认 3000）、`dbPath`（默认 `app.db`）、`bcryptRounds`（4-15，默认 10）、`nodeEnv`；
 - 非法值在**启动时**抛错（fail fast），而不是在深夜的某个请求里；
 - 同时导出 `loadEnvFile()`：启动时若工作目录有 `.env` 就加载。**本机配置写 `.env`、永不提交，仓库只提交 `.env.example` 模板**——这个习惯从 Day 01 就开始养（配一份 `.env.example`，新环境 `cp .env.example .env` 即可跑）。
 
@@ -107,7 +107,7 @@ export abstract class DomainEvent {
 ### 4. `src/modules/shared/infrastructure/`
 
 - `system-time-provider.ts`：`now() => Date.now()`（**全项目唯一**该出现 `Date.now()` 的角落之一）
-- `crypto-id-generator.ts`：`randomBytes(16).toString('hex')`（对比 v1 的 `Math.random()`）
+- `crypto-id-generator.ts`：`randomBytes(16).toString('hex')`（对比 legacy 的 `Math.random()`）
 - `in-memory-event-bus.ts`：按 `event.constructor.name` 路由；关键实现细节：
 
 ```ts

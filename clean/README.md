@@ -1,10 +1,10 @@
-# login-v2 — 清洁架构手打教程
+# clean — 清洁架构手打教程
 
-v1 是「vibe coding 堆出来的屎山」，v2 是同一个业务（登录系统）用**多模块清洁架构**重写一遍，
+legacy 是「vibe coding 堆出来的屎山」，clean 是同一个业务（登录系统）用**多模块清洁架构**重写一遍，
 每天一个主题，**6 天手打 + 1 天综合项目**。
 
 ```
-login-v2/
+clean/
 ├── GUIDE-day01..07.md     手打教程（概念 → 手打目标 → 验收点 → 违规→症状）
 ├── solution/day01..06/    每天的参考答案（独立可跑：npm install && npm run gate）
 ├── solution/day07/
@@ -39,7 +39,7 @@ npm start              # http://localhost:3000 （/health 探针 + /auth 路由�
 一次跑完所有天的门禁：
 
 ```bash
-cd login-v2
+cd clean
 npm run gate:all     # 逐个 solution 目录 npm ci && npm run gate（需要先 npm run install:all）
 npm run install:all
 ```
