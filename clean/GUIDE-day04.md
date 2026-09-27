@@ -76,7 +76,7 @@ export type ValidatedRegister = z.infer<typeof ValidatedRegisterSchema>
 
 ```ts
 // schemas 的 issues 聚合成字段级错误：{ email: ['邮箱格式不正确'], ... }
-throw new ValidationError(fieldErrors as FieldErrors)
+throw new ValidationError(fieldErrors)
 ```
 从今天起，**任何**入口校验都从这里走；手写 if/else 收集错误字符串是 legacy 的屎山形态。
 
