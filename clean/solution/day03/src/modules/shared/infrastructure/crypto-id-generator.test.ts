@@ -1,3 +1,7 @@
+/**
+ * @file CryptoIdGenerator 测试 — id 长度正确且不重复
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { CryptoIdGenerator } from './crypto-id-generator'
 

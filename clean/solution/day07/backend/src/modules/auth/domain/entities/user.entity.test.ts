@@ -1,3 +1,7 @@
+/**
+ * @file UserEntity 测试 — 递进锁定阶梯、锁定计数归零与行桥接往返
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { FakeTimeProvider } from '../../../../../tests/support/fakes'
 import { MAX_FAILED_ATTEMPTS, lockDurationFor } from '../constants'

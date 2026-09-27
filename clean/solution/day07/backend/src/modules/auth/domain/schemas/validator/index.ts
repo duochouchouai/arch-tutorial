@@ -1,3 +1,7 @@
+/**
+ * @file 校验器输出出口 — 五个用例的 Validated* 形状（类型唯一出处）
+ * @author 教程组
+ */
 export { ValidatedForgotPasswordSchema } from './validated-forgot-password'
 export type { ValidatedForgotPassword } from './validated-forgot-password'
 export { ValidatedLoginSchema } from './validated-login'

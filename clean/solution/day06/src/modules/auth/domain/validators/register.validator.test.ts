@@ -1,3 +1,7 @@
+/**
+ * @file RegisterValidator 测试 — 管道产物与各字段级错误
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { ValidationError } from '../../../shared/index'
 import { Email, Password } from '../value-objects/index'

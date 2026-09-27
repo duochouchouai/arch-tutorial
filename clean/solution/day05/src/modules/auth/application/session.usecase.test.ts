@@ -1,3 +1,7 @@
+/**
+ * @file SessionUseCase 测试 — 有效 / 过期 / 未知 token 与幂等登出
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { FakeTimeProvider, InMemorySessionStore } from '../../../../tests/support/fakes'
 import { UnauthorizedError } from '../../shared/index'

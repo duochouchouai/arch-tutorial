@@ -1,3 +1,7 @@
+/**
+ * @file 注册事件发布器测试 — 时钟入载荷、无总线兜底、异常隔离
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { FakeTimeProvider } from '../../../../tests/support/fakes'
 import { InMemoryEventBus } from '../../shared/index'

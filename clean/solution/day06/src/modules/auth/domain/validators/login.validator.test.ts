@@ -1,3 +1,7 @@
+/**
+ * @file LoginValidator 测试 — 归一化、字段级错误与宽松档
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { ValidationError } from '../../../shared/index'
 import { LoginValidator } from './login.validator'

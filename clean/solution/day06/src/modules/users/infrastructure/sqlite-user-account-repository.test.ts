@@ -1,3 +1,7 @@
+/**
+ * @file Sqlite 账号仓储测试 — 往返、查无 null、全量覆盖与唯一约束兜底
+ * @author 教程组
+ */
 import { beforeEach, describe, expect, it } from 'vitest'
 import { openDatabase } from '../../shared/index'
 import type { UserRow } from '../domain/schemas/index'

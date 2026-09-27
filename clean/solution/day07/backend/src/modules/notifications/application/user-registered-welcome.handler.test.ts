@@ -1,3 +1,7 @@
+/**
+ * @file 欢迎邮件处理器测试 — 按载荷发信、异常只记日志
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { UserRegisteredEvent } from '../../auth/index'
 import type { MailSenderPort } from '../domain/ports/mail-sender.port'

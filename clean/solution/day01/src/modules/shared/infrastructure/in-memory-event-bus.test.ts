@@ -1,3 +1,7 @@
+/**
+ * @file InMemoryEventBus 测试 — 按事件类名路由、订阅者隔离、无订阅者 no-op
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { DomainEvent } from '../domain/index'
 import { InMemoryEventBus } from './in-memory-event-bus'

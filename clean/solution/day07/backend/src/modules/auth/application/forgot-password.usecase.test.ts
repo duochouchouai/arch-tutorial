@@ -1,3 +1,7 @@
+/**
+ * @file ForgotPasswordUseCase 测试 — 防枚举静默与 purpose 隔离
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import {
   FakeMailSender,

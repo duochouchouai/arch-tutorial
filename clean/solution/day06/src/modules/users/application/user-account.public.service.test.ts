@@ -1,3 +1,7 @@
+/**
+ * @file 账号公共服务测试 — 四个方法转发到仓储
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import type { UserAccountRepositoryPort } from '../domain/ports/index'
 import type { UserRow } from '../domain/schemas/index'

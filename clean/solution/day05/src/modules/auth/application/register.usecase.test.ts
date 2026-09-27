@@ -1,3 +1,7 @@
+/**
+ * @file RegisterUseCase 测试 — 建号、验证码消费与查重冲突
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import {
   FakeIdGenerator,

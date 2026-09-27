@@ -1,3 +1,7 @@
+/**
+ * @file Code 值对象测试 — 6 位数字形状
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { ValidationError } from '../../../shared/index'
 import { Code } from './code'

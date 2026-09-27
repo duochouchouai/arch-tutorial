@@ -1,3 +1,7 @@
+/**
+ * @file UserEntity 测试 — 初始状态、锁定判据（注入时钟）、行桥接往返
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { FakeTimeProvider } from '../../../../../tests/support/fakes'
 import { LOCK_DURATION_MS, MAX_FAILED_ATTEMPTS } from '../constants'

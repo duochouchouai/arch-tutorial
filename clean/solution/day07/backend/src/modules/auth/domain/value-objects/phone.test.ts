@@ -1,3 +1,7 @@
+/**
+ * @file Phone 值对象测试 — 合法号段构造
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { ValidationError } from '../../../shared/index'
 import { Phone } from './phone'

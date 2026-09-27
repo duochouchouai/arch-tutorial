@@ -1,3 +1,7 @@
+/**
+ * @file SendCodeUseCase 测试 — 生成 → 落库 → 发信全走端口
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import {
   FakeMailSender,

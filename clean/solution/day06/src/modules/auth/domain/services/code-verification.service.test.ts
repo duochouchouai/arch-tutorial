@@ -1,3 +1,7 @@
+/**
+ * @file 验证码校验测试 — 通过与三种失败合并同一个错误
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { InvalidCodeError } from '../errors/index'
 import { Code } from '../value-objects/index'

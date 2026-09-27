@@ -1,3 +1,7 @@
+/**
+ * @file 配置解析测试 — 默认值、环境变量强转、非法值 fail fast
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { loadConfig } from './index'
 

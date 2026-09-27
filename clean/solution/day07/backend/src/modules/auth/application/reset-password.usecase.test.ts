@@ -1,3 +1,7 @@
+/**
+ * @file ResetPasswordUseCase 测试 — 换哈希、吊销旧会话与解锁
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import {
   FakePasswordHasher,

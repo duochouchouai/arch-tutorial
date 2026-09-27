@@ -1,3 +1,7 @@
+/**
+ * @file LoginUseCase 测试 — 会话落库、防枚举、锁定与解锁
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import {
   FakeIdGenerator,

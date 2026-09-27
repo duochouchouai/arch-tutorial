@@ -1,3 +1,7 @@
+/**
+ * @file Password 值对象测试 — 复杂度两档（注册严 / 登录宽）
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { ValidationError } from '../../../shared/index'
 import { Password } from './password'

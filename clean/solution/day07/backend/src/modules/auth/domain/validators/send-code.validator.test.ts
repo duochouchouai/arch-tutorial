@@ -1,3 +1,7 @@
+/**
+ * @file SendCodeValidator 测试 — 合法邮箱成值对象、非法抛错
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { ValidationError } from '../../../shared/index'
 import { Email } from '../value-objects/index'

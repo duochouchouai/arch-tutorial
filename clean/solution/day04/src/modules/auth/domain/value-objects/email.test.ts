@@ -1,3 +1,7 @@
+/**
+ * @file Email 值对象测试 — 构造校验、冻结不可变与 fromTrusted
+ * @author 教程组
+ */
 import { describe, expect, it } from 'vitest'
 import { ValidationError } from '../../../shared/index'
 import { Email } from './email'
