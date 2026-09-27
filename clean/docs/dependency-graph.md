@@ -1,4 +1,4 @@
-# 依赖图与 import 规则（clean Day 07 终态）
+# 依赖图与 import 规则（clean 终态）
 
 ## 1. 顶层装配
 
