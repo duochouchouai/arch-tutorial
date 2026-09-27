@@ -14,14 +14,14 @@ day07/
 # 后端
 cd backend && npm install
 cp .env.example .env                           # 本机配置写 .env（永不进仓库）；默认零配置可跑
-npm run gate                                   # 26 文件通过 + 1 文件跳过（PG 集成）/ 104 测试
+npm run gate                                   # 27 文件通过 + 1 文件跳过（PG 集成）/ 109 测试
 npm start                                      # http://localhost:3000
 
 # 可选：PostgreSQL 集成测试 —— 在 .env 里取消 DATABASE_URL 注释并填本机连接串后
 npm test                                       # 不设 DATABASE_URL 时整个文件自动跳过
 
 # 前端（uni-app 的 .vue 页面用 HBuilderX 打开；门禁只覆盖 TS 层）
-cd uniapp-login && npm install && npm run gate  # 2 文件 / 11 测试
+cd uniapp-login && npm install && npm run gate  # 3 文件 / 15 测试
 ```
 
 ## 任务 → 代码映射

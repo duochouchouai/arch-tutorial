@@ -73,7 +73,7 @@ presentation ──► application ──► domain ◄── infrastructure
 
 1. 跨模块 import 必须解析到对方 `index.ts`（守卫规则 ①）；
 2. `domain/**` 的 import 只能是相对路径 + zod 白名单（守卫规则 ②）；
-3. `INSERT INTO users` / `UPDATE users` / `CREATE TABLE users` 只在 `users/infrastructure/`（守卫规则 ③）。
+3. users 表的 DDL 与全部写语句（INSERT / UPDATE / DELETE / ALTER / DROP）只在 `users/infrastructure/`（守卫规则 ③）。
 
 ## 4. 请求数据流（以登录为例）
 

@@ -17,7 +17,7 @@ clean/
 
 ## 环境要求
 
-- **Node.js ≥ 22**（用了内置的 `node:sqlite`；Node 22 会打印一条 experimental 警告，正常）
+- **Node.js ≥ 22.5**（用了内置的 `node:sqlite`：22.x 早期版本需加 `--experimental-sqlite`，24+ 无需 flag，仅打印一条 experimental 警告；仓库根有 `.nvmrc`（24））
 - npm ≥ 10
 - 可选：PostgreSQL（只有 `solution/day07/backend` 的集成测试需要，提供 `DATABASE_URL` 才运行）
 
@@ -40,8 +40,8 @@ npm start              # http://localhost:3000 （/health 探针 + /auth 路由�
 
 ```bash
 cd clean
-npm run gate:all     # 逐个 solution 目录 npm ci && npm run gate（需要先 npm run install:all）
-npm run install:all
+npm run install:all   # 首次：逐个 solution npm ci（每个目录都是独立项目）
+npm run gate:all      # 逐个 solution 跑 gate（只读：prettier --check + tsc --noEmit + eslint + vitest）
 ```
 
 ## 学习路径
@@ -52,9 +52,9 @@ npm run install:all
 | 02 | 值对象与错误体系 | `Email/Phone/Password/Code` + `AppError` 家族 + 响应信封 | 9 / 37 |
 | 03 | 领域实体 | `UserEntity`（`#private` + 业务方法 + 三桥）+ `FakeTimeProvider` | 10 / 43 |
 | 04 | Schema SSOT 与定校分离 | 形状 Schema + 校验器 + 值对象化输出 | 13 / 54 |
-| 05 | 端口 / 依赖倒置 / 用例 | 7 个端口 + 4 个用例 + SQLite 实现 + 控制器装配 | 20 / 80 |
-| 06 | 多模块协作与架构守卫 | 抽出 `users` 模块（公共端口 + 薄服务）+ 守卫测试 3 条 | 22 / 85 |
-| 07 | 综合项目（要求驱动） | 递进锁定 / PG 仓储 / 忘记密码重置 / notifications + uniapp | 后端 104+ / 前端 11 |
+| 05 | 端口 / 依赖倒置 / 用例 | 7 个端口 + 4 个用例 + SQLite 实现 + 控制器装配 | 21 / 85 |
+| 06 | 多模块协作与架构守卫 | 抽出 `users` 模块（公共端口 + 薄服务）+ 守卫测试 3 条 | 23 / 90 |
+| 07 | 综合项目（要求驱动） | 递进锁定 / PG 仓储 / 忘记密码重置 / notifications + uniapp | 后端 109+ / 前端 15 |
 
 手打方式：**先自己写，再对照参考答案**。每天的 GUIDE 都有「验收点」（期望的测试数量、grep 自查）
 和「违规 → 症状」表（写错了会出什么问题、怎么被测试抓到）。

@@ -46,7 +46,7 @@ z.infer<typeof Schema> 推导类型            —— 禁止 as 绕过
 ### 强制规则
 
 - **Schema 定义在领域层 `domain/schemas/`**（数据形状真理源）。类型一律 `z.infer<typeof Schema>` 推导，schema 与 type 成对导出。
-- **`domain/schemas/` 与 `domain/validators/` 两个目录内允许 `import { z } from 'zod'`**（豁免）。领域层其余文件（实体/值对象/端口/服务）仍零 npm 依赖、零 I/O。
+- **`domain/schemas/`、`domain/validators/`、`domain/events/`（事件载荷形状）三个目录内允许 `import { z } from 'zod'`**（豁免，与架构守卫的白名单一致）。领域层其余文件（实体/值对象/端口/服务）仍零 npm 依赖、零 I/O。
 - **禁止手写 `interface`/`type` 定义数据形状**——数据形状唯一来源是 Schema；任何结构只有一份 Schema 定义，严禁在别处重复。
 - **业务校验规则不进 Schema**（不写 `.min()`/`.email()`/`.default()`）——Schema 只定义形状；业务规则由 Validator 承担。
 - **校验实现放 `domain/validators/`**（`xxx.validator.ts`）。
@@ -98,7 +98,7 @@ z.infer<typeof Schema> 推导类型            —— 禁止 as 绕过
 ## 第二条：分层架构铁律（清洁架构 / 六边形架构）
 
 ### 2.1 分层职责
-- **领域层**（系统心脏）：实体、值对象、**`domain/schemas/`（Zod Schema 数据真理源）**、领域服务、端口 interface。**零框架依赖、零 I/O**；除 `domain/schemas/` 豁免 Zod import 外**零 npm import**。实体内部状态 private/readonly，变更通过业务方法；数据形状由 Schema 定义（`z.infer` 推导类型）；端口由基础设施层实现。
+- **领域层**（系统心脏）：实体、值对象、**`domain/schemas/`（Zod Schema 数据真理源）**、领域服务、端口 interface。**零框架依赖、零 I/O**；除 `domain/schemas/`、`domain/validators/`、`domain/events/` 豁免 Zod import 外**零 npm import**。实体内部状态 private/readonly，变更通过业务方法；数据形状由 Schema 定义（`z.infer` 推导类型）；端口由基础设施层实现。
 - **应用层**：用例服务、管道。编排领域对象和基础设施接口。管理事务、权限、事件发布。**不包含业务规则**，不直接实现数据库或网络调用。
 - **表现层**：HTTP 控制器、WebSocket、CLI 等。解析输入，调用应用服务，使用管道格式化输出。**零业务逻辑**。
 - **基础设施层**：数据库实现、缓存、第三方 API 客户端。在数据出入口通过端口强制校验，绝不返回或存储未校验数据。

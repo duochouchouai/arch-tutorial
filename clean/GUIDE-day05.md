@@ -122,12 +122,12 @@ export class AccountLockedError extends AppError {                 // 423
 - `send-code.usecase.ts`：`CODE_PURPOSE_REGISTER = 'register'`；生成码 → 存（TTL 5 分钟）→ 发邮件；
 - `register.usecase.ts`：**先验码**（否则注册接口能白嫖「邮箱是否已注册」）→ 消费码 → 查重 → 哈希 → 建实体 → 落库 → 发事件；
 - `login.usecase.ts`：见上文；
-- `session.usecase.ts`：`current(token)` / `logout(token)`。
+- `session.usecase.ts`：`current(token)`（会话过期判据在这层，时钟注入）/ `logout(token)`。
 
 ### 5. `infrastructure/`
 
 `bcrypt-password-hasher`（轮数注入）、`sqlite-code-store`（表主键 `(purpose, target)`）、
-`sqlite-session-store`（惰性过期）、`console-mail-sender`（打印验证码）、`crypto-code-generator`（`randomInt` 补齐 6 位）、
+`sqlite-session-store`（存、取、删；过期判定在用例）、`console-mail-sender`（打印验证码）、`crypto-code-generator`（`randomInt` 补齐 6 位）、
 `sqlite-user-account-repository`（**users 表 DDL 与 INSERT/UPDATE 的唯一落点**）。
 
 ### 6. `presentation/`
@@ -149,7 +149,7 @@ export function createAuthModule(deps: AuthModuleDeps): AuthModule {
 
 ### 8. 测试
 
-- 用例测试（4 个）：用 `tests/support/fakes.ts` 的替身（`InMemoryUserAccountStore` / `FakePasswordHasher` / `FakeMailSender` / `InMemoryCodeStore` …）；
+- 用例测试（5 个）：用 `tests/support/fakes.ts` 的替身（`InMemoryUserAccountStore` / `FakePasswordHasher` / `FakeMailSender` / `InMemoryCodeStore` …）；
 - 仓储测试：`:memory:` 库往返；
 - `tests/auth.e2e.test.ts`：**真实实现全链路**（send-code → register → login → session → logout）+ 失败面矩阵（400/401/409/423）。
 
@@ -163,7 +163,7 @@ cd solution/day05 && npm install && npm run gate
 
 | 检查 | 期望 |
 |------|------|
-| `npm test` | **20 个文件 / 80 个测试**全过 |
+| `npm test` | **21 个文件 / 85 个测试**全过 |
 | 冒烟 | `npm start` 后：`curl -X POST localhost:3000/auth/send-code -H 'Content-Type: application/json' -d '{"email":"a@b.com"}'` → 控制台打印验证码；用该码 register → login 拿 token |
 | 分层自查 | `grep -rn "bcrypt" src/modules/auth/{domain,application}` 无结果 |
 | SQL 自查 | `grep -rn "SELECT\|INSERT" src/modules/auth/{domain,application,presentation}` 无结果 |

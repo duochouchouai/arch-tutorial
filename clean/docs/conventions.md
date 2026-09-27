@@ -30,7 +30,7 @@ modules/notifications/ 通知：订阅事件（附加题）
 |---|---|
 | 一切**形状**用 zod 定义并成对导出 `z.infer` 类型 | 禁止手写 `interface` 重述数据形状 |
 | 形状（`schemas/api/`）与业务规则（`validators/`）分离 | 形状只描述类型；`.min()`/`.email()` 等规则写在 `validators/` |
-| 校验器输出也是 Schema（`schemas/validator/`） | 返回值为值对象，而非裸字符串 |
+| 校验器输出也是 Schema（`schemas/validator/`） | 类型唯一出处（`z.infer`）；返回值为值对象，运行时保证来自 `create()` 构造即校验（`z.custom<T>()` 只做类型标注，不重复 parse） |
 | 用例依赖清单也是 Schema（`schemas/deps/`） | 以 `z.custom<Port>()` 标注，依赖契约在类型中显式可见 |
 | 跨边界数据（HTTP 入参、DB 行、配置、事件载荷、环境变量）**必须先 parse 再使用** | 禁止以 `as` 断言外部数据 |
 
@@ -48,8 +48,8 @@ modules/notifications/ 通知：订阅事件（附加题）
 
 | 约定 | 说明 |
 |---|---|
-| **判据归属**：过期/锁定/匹配等判定属于领域层（实体、领域服务），不在存储实现中 | 存储只负责存、取、删；`SELECT` 中不含业务判断 |
-| **表归属**：一张表的 DDL 与全部写 SQL 只出现在**拥有者模块的 infrastructure** | `INSERT INTO users` / `UPDATE users` / `CREATE TABLE users` 仅 `users/infrastructure/`（守卫规则 ③） |
+| **判据归属**：过期/锁定/匹配等判定属于领域层（实体、领域服务）或应用层用例，不在存储实现中 | 存储只负责存、取、删（过期行也照样返回）；判据接受注入的时钟 —— 如会话过期在 `SessionUseCase`、登录锁定在实体 |
+| **表归属**：一张表的 DDL 与全部写 SQL 只出现在**拥有者模块的 infrastructure** | `INSERT INTO users` / `UPDATE users` / `DELETE FROM users` / DDL 仅 `users/infrastructure/`（守卫规则 ③） |
 | 列名 → 字段名映射使用 SQL `AS` 别名 | 代码中不手写映射表；列名变化时 `.parse()` 立即报错 |
 
 ## 5. 错误体系
@@ -86,7 +86,7 @@ modules/notifications/ 通知：订阅事件（附加题）
 |---|---|
 | 每层各自可测：值对象/实体（纯逻辑）、用例（替身端口）、仓储（`:memory:`）、e2e（完整装配） | e2e 使用 `createApp()`：**测试装配与运行装配一致** |
 | 替身（fake）放 `tests/support/fakes.ts`，测试只依赖端口 | 断言最终状态，而非以 `vi.fn` 断言调用次数 |
-| 架构约定写进 `tests/architecture.test.ts`（3 条规则 + sanity check） | 约定必须可执行：违反时测试失败，否则等同于没有约定 |
+| 架构约定写进 `tests/architecture.test.ts`（3 条规则 + 自检：守卫扫到源码、正则覆盖各类写语句） | 约定必须可执行：违反时测试失败，否则等同于没有约定 |
 | 门禁包含四项检查：`prettier --check` + `tsc --noEmit` + `eslint` + `vitest` | `npm run gate`；`npm run gate:all` 依次运行全部 8 个目录（含架构守卫） |
 | `tsc` 12 条 strict 全开；`no-explicit-any` / `ban-ts-comment` 为 error | 类型系统是设计工具，而非形式装饰 |
 

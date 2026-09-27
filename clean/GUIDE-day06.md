@@ -109,7 +109,7 @@ auth 发 `UserRegisteredEvent`（Day 07 的 notifications 订阅它），
 
 ### 5. 全量测试 + 守卫自测
 
-改完跑 `npm test`：既有 82 个测试应全部继续通过（**纯重构**：行为零变化）。
+改完跑 `npm test`：既有 86 个测试应全部继续通过（**纯重构**：行为零变化）。
 再故意违规一次（例如在 `auth/domain/` 里 `import { z } from 'zod'` 之外的 npm 包，或在别处写一句 `INSERT INTO users`），确认守卫测试**真的会红**。
 
 ---
@@ -122,10 +122,10 @@ cd solution/day06 && npm install && npm run gate
 
 | 检查 | 期望 |
 |------|------|
-| `npm test` | **22 个文件 / 85 个测试**全过（含守卫） |
+| `npm test` | **23 个文件 / 90 个测试**全过（含守卫） |
 | 守卫自测 | 临时加一句违规代码 → 守卫测试红；删掉 → 恢复绿 |
 | 跨模块 import | `grep -rn "modules/users/" src/modules/auth` 的结果全部以 `modules/users/index` 结尾 |
-| 表归属 | `grep -rn "INTO users\|CREATE TABLE users" src` 只命中 `users/infrastructure/` |
+| 表归属 | `grep -rnE "(INTO\|UPDATE\|FROM\|TABLE) users" src` 只命中 `users/infrastructure/` |
 | 依赖方向 | `grep -rn "modules/auth" src/modules/users` 无结果（users 不知道 auth 存在） |
 
 ---

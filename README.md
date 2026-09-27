@@ -1,6 +1,6 @@
 # 屎山代码演进教程 🏔️💩 → 🏗️✨
 
-![Node.js ≥ 22](https://img.shields.io/badge/Node.js-%E2%89%A5%2022-339933?logo=nodedotjs&logoColor=white&style=flat-square)
+![Node.js ≥ 22.5](https://img.shields.io/badge/Node.js-%E2%89%A5%2022.5-339933?logo=nodedotjs&logoColor=white&style=flat-square)
 ![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white&style=flat-square)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-blueviolet?style=flat-square)](exercise/README.md)
 
@@ -52,7 +52,7 @@ cat GUIDE-day01.md       # 从第一天开始，跟着 GUIDE 打代码
 
 ```bash
 cd clean/solution/day06
-npm install && npm run gate     # prettier + tsc + eslint + vitest（22 文件 / 85 测试）
+npm install && npm run gate     # prettier + tsc + eslint + vitest（23 文件 / 90 测试）
 
 cd clean
 npm run gate:all                # 所有 solution 的门禁，一次跑完 8 个目录
@@ -71,9 +71,9 @@ npm run gate:all                # 所有 solution 的门禁，一次跑完 8 个
 | Day 02 | 邮箱 if/else 校验 | 值对象（构造即校验）+ AppError 体系 + 响应信封 | 9 / 37 |
 | Day 03 | 忘记密码（`Math.random()`、无过期） | 领域实体（`#private` + 业务方法 + 注入时钟） | 10 / 43 |
 | Day 04 | 记住我（token 永不过期） | Schema SSOT + 形状/规则分离 + 值对象化校验输出 | 13 / 54 |
-| Day 05 | 账户锁定（`setTimeout` + 双状态） | 端口 + 依赖倒置 + 7 端口 / 4 用例 / SQLite 接线 | 20 / 80 |
-| Day 06 | 微信 + QQ（复制粘贴、AppSecret 硬编码） | 抽出 users 模块 + 公共端口 + 架构守卫测试 | 22 / 85 |
-| Day 07 | — | 递进式锁定 / PostgreSQL 仓储 / 忘记密码重置 / notifications 订阅 + uniapp 前端 | 后端 104+ / 前端 11 |
+| Day 05 | 账户锁定（`setTimeout` + 双状态） | 端口 + 依赖倒置 + 7 端口 / 4 用例 / SQLite 接线 | 21 / 85 |
+| Day 06 | 微信 + QQ（复制粘贴、AppSecret 硬编码） | 抽出 users 模块 + 公共端口 + 架构守卫测试 | 23 / 90 |
+| Day 07 | — | 递进式锁定 / PostgreSQL 仓储 / 忘记密码重置 / notifications 订阅 + uniapp 前端 | 后端 109+ / 前端 15 |
 
 「legacy 的每个雷 → clean 的哪条纪律」的对照写在每天的 GUIDE 里（含「违规 → 症状」表）。
 
@@ -82,11 +82,11 @@ npm run gate:all                # 所有 solution 的门禁，一次跑完 8 个
 | | legacy | clean |
 |--|----|----|
 | 语言 | JavaScript | TypeScript（12 条 strict 全开） |
-| 数据库 | better-sqlite3 | `node:sqlite`（Node ≥ 22 内置）；Day 07 可切 PostgreSQL |
+| 数据库 | better-sqlite3 | `node:sqlite`（Node ≥ 22.5 内置，22.x 早期版本需 `--experimental-sqlite`）；Day 07 可切 PostgreSQL |
 | 框架 | Express | Express |
 | 密码 | 明文 | bcryptjs（轮数可配） |
 | 校验 | 手写 if/else | Zod（Schema 是唯一形状真理源） |
-| 测试 | 无 | vitest（≤ 104+ 个）+ supertest e2e + 架构守卫 |
+| 测试 | 无 | vitest（≤ 109+ 个）+ supertest e2e + 架构守卫 |
 | 前端 | 无 | uni-app（Day 07：注册/登录/忘记密码/重置，`uni.request` 只在 infrastructure） |
 | 门禁 | 手动 | `npm run gate:all`：8 个 solution 目录各自 `npm run gate`（含架构守卫测试） |
 
