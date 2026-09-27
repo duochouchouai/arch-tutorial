@@ -58,6 +58,17 @@ describe('注册 → 登录 → 会话 → 退出', () => {
     await request(app).delete('/auth/session').set('Authorization', `Bearer ${token}`).expect(200)
     await request(app).get('/auth/session').set('Authorization', `Bearer ${token}`).expect(401)
   })
+
+  it('过期会话：401（过期判据在用例层，仓储不过滤行）', async () => {
+    await registerAlice()
+    const loggedIn = await request(app).post('/auth/login').send({ username: 'alice', password: PASSWORD })
+    const token: string = loggedIn.body.data.token
+
+    // 白盒：把过期时间拨到过去 = 模拟 30 天后（e2e 用真实时钟，无法 advance）
+    db.prepare('UPDATE auth_sessions SET expires_at = ? WHERE token = ?').run(Date.now() - 1, token)
+
+    await request(app).get('/auth/session').set('Authorization', `Bearer ${token}`).expect(401)
+  })
 })
 
 describe('注册的失败面', () => {

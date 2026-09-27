@@ -54,9 +54,10 @@ export const AuthLoginDepsSchema = AuthBaseDepsSchema.extend({
 })
 export type AuthLoginDeps = z.infer<typeof AuthLoginDepsSchema>
 
-/** 会话读取 / 退出 */
+/** 会话读取 / 退出（过期判定在用例：因此需要时钟） */
 export const AuthSessionDepsSchema = z.object({
   sessionStore: z.custom<SessionStorePort>(),
+  timeProvider: z.custom<TimeProvider>(),
 })
 export type AuthSessionDeps = z.infer<typeof AuthSessionDepsSchema>
 

@@ -83,7 +83,7 @@ export function createAuthModule(deps: AuthModuleDeps): AuthModule {
     passwordHasher,
     sessionStore,
   })
-  const sessionUseCase = new SessionUseCase({ sessionStore })
+  const sessionUseCase = new SessionUseCase({ sessionStore, timeProvider: deps.timeProvider })
 
   // 校验器 + 控制器 + 路由
   const controllerDeps: AuthControllerDeps = {

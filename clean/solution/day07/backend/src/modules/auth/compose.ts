@@ -92,7 +92,7 @@ export function createAuthModule(deps: AuthModuleDeps): AuthModule {
     passwordHasher,
     sessionStore,
   })
-  const sessionUseCase = new SessionUseCase({ sessionStore })
+  const sessionUseCase = new SessionUseCase({ sessionStore, timeProvider: deps.timeProvider })
   const forgotPasswordUseCase = new ForgotPasswordUseCase({
     userAccount: deps.userAccount,
     timeProvider: deps.timeProvider,
