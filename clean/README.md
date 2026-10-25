@@ -4,7 +4,7 @@
 
 ```
 clean/
-├── 00-开始之前.md         预备知识 + 术语表 + TypeScript 速览（先读）
+├── 00-开始之前.md         预备知识 + 术语表 + TypeScript 与 uni-app 速览（先读）
 ├── GUIDE-day01..07.md     教程正文（概念 → 手打目标 → 验收点 → 违规 → 症状）
 ├── solution/day01..06/    每日参考答案（独立项目：npm install && npm run gate）
 ├── solution/day07/
@@ -20,6 +20,7 @@ clean/
 - **Node.js ≥ 22.5**
 - npm ≥ 10
 - PostgreSQL（可选）
+- HBuilderX（可选，仅 Day 07 前端页面运行需要；命令行门禁不依赖）
 
 ## 快速开始
 
@@ -45,7 +46,7 @@ npm run gate:all      # 逐个 solution 执行 gate（只读检查：prettier --
 
 ## 学习路径
 
-开始前请阅读 `00-开始之前.md`，其中包含术语表、TypeScript 最小语法集合与 12 项 strict 选项的说明。
+开始前请阅读 `00-开始之前.md`，其中包含术语表、TypeScript 最小语法集合、12 项 strict 选项的说明，以及 Day 07 前端使用的 uni-app 入门（第 7 节）。
 
 | Day | 主题 | 内容 | 测试规模 |
 |----|------|----------------|----------|

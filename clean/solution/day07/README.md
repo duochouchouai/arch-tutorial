@@ -24,6 +24,8 @@ npm test                                       # 未设置 DATABASE_URL 时整�
 cd uniapp-Frontend && npm install && npm run gate  # 3 文件 / 15 测试
 ```
 
+uni-app 的基础概念与项目结构见 `../../00-开始之前.md` 第 7 节。
+
 ## 任务 → 代码映射
 
 | 任务 | 实现位置 | 关键文件 |
