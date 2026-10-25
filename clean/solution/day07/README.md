@@ -44,9 +44,9 @@ cd uniapp-login && npm install && npm run gate  # 3 文件 / 15 测试
 - **modules/notifications**：`createNotificationsModule({ eventBus })` 装配即订阅；
 - **测试**：实体档位、两轮升级 e2e、忘记/重置 e2e（防枚举、一次性、用途隔离、旧会话失效）、PG 集成（跳过式）、notifications 单测 + 装配集成。
 
-## 已知简化（真实仓库的差异）
+## 已知简化（与生产实现的差异）
 
-- 表结构用 `CREATE TABLE IF NOT EXISTS`（真实仓库用迁移链）；
-- 事件用内存总线（真实仓库用 outbox + worker，保证不丢）；
+- 表结构用 `CREATE TABLE IF NOT EXISTS`（生产系统用迁移链）；
+- 事件用内存总线（生产系统用 outbox + worker，保证不丢）；
 - PG 切换只覆盖 **users 表**；auth 自己的 `auth_codes` / `auth_sessions` 仍是 SQLite（教程范围控制）；
 - 前端不做路由参数传递（`onLoad(query)`）与组件样式抽取，保持页面单一职责。

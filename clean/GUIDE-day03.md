@@ -3,10 +3,12 @@
 预计时间：**120 分钟**（概念 25 + 手打 70 + 验收 25）
 
 > 手打完再对照 `solution/day03/`。
+>
+> **本日涉及的 TS 语法**：`#private` 字段、getter、静态工厂、`readonly`、`z.infer`。不熟悉可先看 `00-开始之前.md` 第 3 节。
 
 ---
 
-## 📖 概念
+## 概念
 
 ### 1. 实体不是「带类型的 JSON」
 
@@ -84,7 +86,7 @@ export type UserRow = z.infer<typeof UserRowSchema>
 
 ---
 
-## ✍️ 手打目标
+## 手打目标
 
 ### 1. `src/modules/auth/domain/constants.ts`
 
@@ -130,7 +132,7 @@ export class FakeTimeProvider implements TimeProvider {
 
 ---
 
-## ✅ 验收点
+## 验收点
 
 ```bash
 cd solution/day03 && npm install && npm run gate
@@ -145,20 +147,13 @@ cd solution/day03 && npm install && npm run gate
 
 ---
 
-## 🚨 违规 → 症状
+## 违规 → 症状
 
 | 违规 | 症状 |
 |------|------|
 | 实体字段 `public`（没有 `#`） | 用例里出现 `user.lockedUntil = ...`；规则从实体漏进用例，两处规则开始漂移 |
 | 实体里 `Date.now()` | 测试要 `await sleep(50)`；CI 偶发红；跨时区/夏令时出错 |
-| 手写 `interface UserRow` 与 Schema 并存 | Day 07 加 `lockCount` 时只改了一处，另一处静默不一致，运行时才炸 |
+| 手写 `interface UserRow` 与 Schema 并存 | Day 07 加 `lockCount` 时只改了一处，另一处静默不一致，直到运行时才暴露 |
 | `toSnapshot()` 返回 `this`（直接吐实体） | 响应里出现 `passwordHash`；测试若只断言个别字段则发现不了 —— 所以要断言键集合 |
 | 用 `as` 把 DB 行断言成 `UserRow` | 列名写错/数据库升级后字段缺失都不会报错，直到线上出现 `undefined` |
 
----
-
-## 🔭 与真实仓库（NKDate）的对应
-
-- 真实仓库实体同样 `#private` + 业务方法 + `toRow/fromData/toSnapshot` 三桥；行为（改密码、记登录）在实体，行形状在领域 Schema；
-- 时间一律 `TimeProvider`：真实仓库里 TTL、过期、重试退避全部可注入可测；
-- 一个额外细节：真实仓库的 `toRow()` 有时叫 `toPersistence()`（按持久化目标命名）—— 命名不同，纪律相同。

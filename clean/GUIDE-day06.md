@@ -3,10 +3,12 @@
 预计时间：**150 分钟**（概念 30 + 手打 90 + 验收 30）
 
 > 手打完再对照 `solution/day06/`（本教程的「终态」基线：Day 07 从它派生）。
+>
+> **本日涉及的 TS 语法**：`import type`、barrel（`index.ts` 汇总导出）、`interface`。不熟悉可先看 `00-开始之前.md` 第 3 节。
 
 ---
 
-## 📖 概念
+## 概念
 
 ### 1. 为什么要把 users 抽成独立模块
 
@@ -73,6 +75,8 @@ const auth = createAuthModule({ db, userAccount: users.account, timeProvider, id
 
 > 守卫测试自己也要有 sanity check（如「扫到的文件数 > 30」），否则正则写错、扫了个空目录也会「全绿」。
 
+工程实践中，这类守卫通常由 ESLint 的 `no-restricted-imports` 加自定义脚本共同承担 —— 关键是把规则放进 CI，而不是只写在文档里。
+
 ### 5. 事件：模块间的最低耦合协作
 
 auth 发 `UserRegisteredEvent`（Day 07 的 notifications 订阅它），
@@ -80,7 +84,7 @@ auth 发 `UserRegisteredEvent`（Day 07 的 notifications 订阅它），
 
 ---
 
-## ✍️ 手打目标
+## 手打目标
 
 ### 1. 新建 `modules/users/`（从 auth 搬 3 个文件）
 
@@ -114,7 +118,7 @@ auth 发 `UserRegisteredEvent`（Day 07 的 notifications 订阅它），
 
 ---
 
-## ✅ 验收点
+## 验收点
 
 ```bash
 cd solution/day06 && npm install && npm run gate
@@ -130,7 +134,7 @@ cd solution/day06 && npm install && npm run gate
 
 ---
 
-## 🚨 违规 → 症状
+## 违规 → 症状
 
 | 违规 | 症状 |
 |------|------|
@@ -140,10 +144,3 @@ cd solution/day06 && npm install && npm run gate
 | 公共端口既有内部方法又有对外方法（合成一个大端口） | 消费者能用的面比需要的宽 → 破坏性改动概率上升；「窄口」失效 |
 | 守卫测试没有 sanity check（文件数下限） | 守卫自己「静默失效」：路径改错后它扫到 0 个文件，永远绿 |
 
----
-
-## 🔭 与真实仓库（NKDate）的对应
-
-- 真实仓库每模块 `index.ts` 即公开面；**窄口原则**体现在「同一提供方按消费者切多个端口」（本教程只有一个消费者 auth，故合成一个端口 + 注释标明动机）；
-- `UserAccountPublicService` 这种「薄应用服务」在真实仓库里还会承载审计、缓存、事务；
-- 架构守卫在真实仓库是 ESLint 的 `no-restricted-imports` + 自定义脚本双保险：**规则写进 CI，而不是写进文档**。

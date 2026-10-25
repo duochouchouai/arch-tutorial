@@ -4,10 +4,12 @@
 
 > 手打完再对照 `solution/day05/`。这是全教程改动量最大的一天：30+ 个文件。
 > 建议顺序：端口 → 用例 → 基础设施 → 表现层 → compose → main → 测试。
+>
+> **本日涉及的 TS 语法**：`interface` 端口、`Promise<T>`、`z.custom<Port>()`、`readonly #deps`、`instanceof` 收窄。不熟悉可先看 `00-开始之前.md` 第 3 节。
 
 ---
 
-## 📖 概念
+## 概念
 
 ### 1. legacy 的用例里藏着 SQL 和 bcrypt
 
@@ -17,7 +19,7 @@ const row = await db.get('SELECT * FROM users WHERE username = ?', [username])  
 const ok = await bcrypt.compare(password, row.password_hash)                    // ✗ 算法
 if (ok) { row.failed_attempts = 0; await db.run('UPDATE users ...') }           // ✗ 表结构
 ```
-后果：换库要改用例；测用例必须起数据库；bcrypt 让单测慢到不想跑。
+后果：换库要改用例；测用例必须起数据库；bcrypt 让单测变得很慢。
 
 ### 2. 端口 + 依赖倒置
 
@@ -89,11 +91,11 @@ export function assertCodeValid(stored: StoredCode | null, input: Code, now: num
 ### 6. 事务边界与「代码生成不用 Math.random」
 
 - 会话 token / 验证码都经 `IdGenerator` / `CodeGenerator` 端口（密码学随机源），legacy 用 `Math.random()` —— 可直接猜测；
-- 本阶段没有跨表事务（注册写 users + 消费验证码 + 发事件）—— 教程简化，真实仓库用 outbox 保证「事件不丢」，见 Day 06/07 说明。
+- 本阶段没有跨表事务（注册写 users + 消费验证码 + 发事件）—— 教程为控制范围省去了事务与 outbox；生产系统通常用 outbox（同事务写表 + 后台重放）保证事件不丢。
 
 ---
 
-## ✍️ 手打目标（按依赖顺序）
+## 手打目标（按依赖顺序）
 
 ### 1. `domain/ports/`（7 个）+ `domain/errors/auth.errors.ts`
 
@@ -155,7 +157,7 @@ export function createAuthModule(deps: AuthModuleDeps): AuthModule {
 
 ---
 
-## ✅ 验收点
+## 验收点
 
 ```bash
 cd solution/day05 && npm install && npm run gate
@@ -171,7 +173,7 @@ cd solution/day05 && npm install && npm run gate
 
 ---
 
-## 🚨 违规 → 症状
+## 违规 → 症状
 
 | 违规 | 症状 |
 |------|------|
@@ -183,11 +185,3 @@ cd solution/day05 && npm install && npm run gate
 | 用例直接 `new Date()` 判过期 | 测试写不动；CI 凌晨跑和白天跑结果不同 |
 | 事件发布失败抛回注册用例 | 「注册成功但用户看到 500」；副作用把主流程拖垮 |
 
----
-
-## 🔭 与真实仓库（NKDate）的对应
-
-- 端口命名：真实仓库用 `XxxRepositoryPort` / `XxxServicePort`；`Promise` 形状一致；
-- 真实仓库的 deps 契约同样 `z.custom<Port>()` 标注（不运行时校验对象内部）；
-- 事件发布在真实仓库是 outbox（同事务写表 + worker 重放）；教程用内存总线 + 「失败不抛」，纪律相同、可靠性降级；
-- `bcryptRounds` 从配置进（生产 10+，测试 4）—— 真实仓库同样按环境调。

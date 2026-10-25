@@ -3,17 +3,19 @@
 预计时间：**120 分钟**（概念 25 + 手打 70 + 验收 25）
 
 > 手打完再对照 `solution/day02/`。
+>
+> **本日涉及的 TS 语法**：`class`（`private constructor`、`static`、`extends`）、`readonly`、可选属性 `?`、`new.target`。不熟悉可先看 `00-开始之前.md` 第 3 节。
 
 ---
 
-## 📖 概念
+## 概念
 
 ### 1. 「一段字符串」和「一个邮箱」不是同一种东西
 
 legacy 的注册校验长这样（`presentation/auth-schema.ts` 里的 zod schema + `auth-controller.ts` 里的 if/else）：
 
 ```ts
-// legacy：形状、格式、强度全糊在一起；错误用手拼字符串
+// legacy：形状、格式、强度全混在一起；错误用手拼字符串
 if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
   errors.push('邮箱格式不正确')
 }
@@ -72,7 +74,7 @@ export class AppError extends Error {
 
 ---
 
-## ✍️ 手打目标
+## 手打目标
 
 ### 1. `src/modules/shared/domain/errors/`
 
@@ -123,7 +125,7 @@ app.use(errorHandler)     // 必须在所有路由之后
 
 ---
 
-## ✅ 验收点
+## 验收点
 
 ```bash
 cd solution/day02 && npm install && npm run gate
@@ -138,7 +140,7 @@ cd solution/day02 && npm install && npm run gate
 
 ---
 
-## 🚨 违规 → 症状
+## 违规 → 症状
 
 | 违规 | 症状 |
 |------|------|
@@ -148,10 +150,3 @@ cd solution/day02 && npm install && npm run gate
 | 把未知错误包装成 `AppError('服务器错误', 500)` | 真 bug 被伪装成「业务错误」，日志里看不到堆栈，排查靠猜 |
 | 错误文案当契约（前端 `if (message === '密码错误')`） | 改一句文案就崩前端；正确姿势是认 `code` / `statusCode` |
 
----
-
-## 🔭 与真实仓库（NKDate）的对应
-
-- 真实仓库的 `domain/value-objects/` 同构：`private constructor` + `Object.freeze` + `create` / `fromTrusted` 三件套；
-- 错误基类同样是 `code + statusCode + fieldErrors`，但**每模块的错误类放自己模块**（如 `auth/domain/errors/auth.errors.ts`，Day 05 出现）；
-- `errorHandler` 在真实仓库里还接 Sentry 之类的上报 —— 但「响应不泄露内部信息」这条永远不变。

@@ -4,10 +4,12 @@
 
 > 本教程的每一天都以「你能自己打出同构的代码」为验收标准。
 > 参考答案在 `solution/dayNN/`，**手打完再对照**，不要先看答案。
+>
+> **本日涉及的 TS 语法**：类型注解与推断、`interface` / `type`、`readonly`、`abstract class`、`Promise<void>`、`import type`。不熟悉可先看 `00-开始之前.md` 第 3 节。
 
 ---
 
-## 📖 概念：为什么第一天就要「骨架 + 组合根」
+## 概念：为什么第一天就要「骨架 + 组合根」
 
 legacy 的目录长这样：
 
@@ -24,7 +26,7 @@ legacy/src/
 
 1. 任何文件都能 import 任何文件 —— 依赖方向只靠自觉；
 2. 装配散落在路由文件和 index.ts 里 —— 想换实现要翻全仓库；
-3. 没有守卫 —— 三个月后没人知道哪条纪律是硬约束。
+3. 没有守卫 —— 哪条纪律是硬约束、哪条只是口头约定，后续无从判断。
 
 clean 的第一天不做业务，只立两样东西：**多模块的目录形状** 和 **唯一的组合根**。
 
@@ -54,7 +56,7 @@ Day 03 起你会看到 `FakeTimeProvider.advance()` 一行代码完成时间旅�
 
 ---
 
-## ✍️ 手打目标
+## 手打目标
 
 > 每个文件都要求：`@file` / `@author` 文件头 + 为什么这么做（不是「做了什么」）。
 
@@ -68,12 +70,14 @@ Day 03 起你会看到 `FakeTimeProvider.advance()` 一行代码完成时间旅�
 | `.prettierrc` | `{ semi:false, singleQuote:true, printWidth:120, trailingComma:"all" }` |
 | `vitest.config.ts` | `minWorkers: 1, maxWorkers: 2`（教程机器内存小；真实项目按 CI 配置） |
 
+> 12 条 strict 各自防住什么、常见 TS 报错怎么对照，见 `00-开始之前.md` 第 4、5 节。
+
 ### 1. `src/config/index.ts`
 
 zod 校验环境变量，导出 `ConfigSchema` / `Config` / `loadConfig(env = process.env)`：
 
 - `port`（`z.coerce.number()`，默认 3000）、`dbPath`（默认 `app.db`）、`bcryptRounds`（4-15，默认 10）、`nodeEnv`；
-- 非法值在**启动时**抛错（fail fast），而不是在深夜的某个请求里；
+- 非法值在**启动时**抛错（fail fast），而不是等到某次请求运行时才暴露；
 - 同时导出 `loadEnvFile()`：启动时若工作目录有 `.env` 就加载。**本机配置写 `.env`、永不提交，仓库只提交 `.env.example` 模板**——这个习惯从 Day 01 就开始养（配一份 `.env.example`，新环境 `cp .env.example .env` 即可跑）。
 
 ### 2. `src/modules/shared/domain/ports/`
@@ -117,7 +121,7 @@ async publish(event: DomainEvent): Promise<void> {
   await Promise.allSettled(handlers.map((handler) => Promise.resolve().then(() => handler(event))))
 }
 ```
-> 自己动手写一遍「同步抛错的订阅者」测试，你会先掉进 `allSettled` 不接同步错误的坑 —— 这正是要手打的原因。
+> 建议亲手写一遍「订阅者同步抛错」的测试：先观察 `allSettled` 捕获不到同步异常的问题，再理解外层 `Promise.resolve().then(...)` 包装的用意。这也是本教程坚持手打的原因。
 
 ### 5. `src/modules/auth/compose.ts`（骨架）+ `index.ts`
 
@@ -148,13 +152,13 @@ if (require.main === module) { /* 只有直接运行才 listen */ }
 ### 7. 测试（3 + 1 个文件）
 
 - `src/config/index.test.ts`：默认值 / 非法值抛错 / 环境变量覆盖；
-- `src/modules/shared/infrastructure/in-memory-event-bus.test.ts`：类名路由、订阅者抛错隔离、无订阅者不炸；
+- `src/modules/shared/infrastructure/in-memory-event-bus.test.ts`：类名路由、订阅者抛错隔离、无订阅者不报错；
 - `src/modules/shared/infrastructure/crypto-id-generator.test.ts`：16 字节 hex、不重复；
 - `tests/health.e2e.test.ts`：supertest 打真 `createApp()`，200 + `{ status: 'ok' }`。
 
 ---
 
-## ✅ 验收点
+## 验收点
 
 ```bash
 cd solution/day01
@@ -173,7 +177,7 @@ npm start             # 另开终端：curl localhost:3000/health → {"status":
 
 ---
 
-## 🚨 违规 → 症状
+## 违规 → 症状
 
 | 违规 | 症状（怎么发现的） |
 |------|--------------------|
@@ -183,10 +187,3 @@ npm start             # 另开终端：curl localhost:3000/health → {"status":
 | 没有 `index.ts` barrel，全项目按相对路径互 import | 移动一个文件要改 20 处 import；模块边界无从谈起 |
 | `any` 逃逸（`as any`、`@ts-ignore`） | eslint 直接 error；类型系统失去意义，重构靠运气 |
 
----
-
-## 🔭 与真实仓库（NKDate）的对应
-
-- 真实仓库模块更多（`users` / `orders` / …），**每个模块同样只有一个 `index.ts` 公开面**；`shared` 在真实仓库拆成多个入口（`@shared/ports`、`@shared/infrastructure`），教程为少一层心智负担合成一个；
-- 组合根在真实仓库里就是 `src/main.ts` + 各模块 `compose.ts`，和你今天打的结构同形；
-- `TimeProvider` 不是教学道具：真实仓库里所有「过期/锁定/TTL」判定都走注入的时钟，测试从不需要等真实时间。
