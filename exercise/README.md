@@ -30,7 +30,7 @@ exercise/
 ## 每一天的验收（自检清单）
 
 1. `npm run gate` 四项全部通过：`prettier --check` + `tsc --noEmit` + `eslint` + `vitest`；
-2. 测试数量与 GUIDE 当天的「验收点」一致（例：Day 05 为 20 文件 / 80 测试）；
+2. 测试数量与 GUIDE 当天的「验收点」一致（各天的期望数字以 GUIDE 为准，总览见 `clean/README.md` 的「学习路径」表）；
 3. Day 06 起另含 `tests/architecture.test.ts`：除了保持通过外，也可以尝试**验证其失败路径**，比如刻意编写一处违规的跨模块 import，确认守卫确实会失败；
 4. 本机配置写入各自的 `.env`（参照 `.env.example`），仓库中仅保留 `.env.example`。
 

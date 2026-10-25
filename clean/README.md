@@ -5,6 +5,7 @@ legacy 是「vibe coding 堆出来的屎山」，clean 是同一个业务（登�
 
 ```
 clean/
+├── 00-开始之前.md         读者假设 + 术语表 + TypeScript 速览（先读）
 ├── GUIDE-day01..07.md     手打教程（概念 → 手打目标 → 验收点 → 违规→症状）
 ├── solution/day01..06/    每天的参考答案（独立可跑：npm install && npm run gate）
 ├── solution/day07/
@@ -17,7 +18,7 @@ clean/
 
 ## 环境要求
 
-- **Node.js ≥ 22.5**（用了内置的 `node:sqlite`：22.x 早期版本需加 `--experimental-sqlite`，24+ 无需 flag，仅打印一条 experimental 警告；仓库根有 `.nvmrc`（24））
+- **Node.js ≥ 22.5**（用了内置的 `node:sqlite`：22.5–22.12 需加 `--experimental-sqlite`，22.13+ 无需 flag；仓库根有 `.nvmrc`（24））
 - npm ≥ 10
 - 可选：PostgreSQL（只有 `solution/day07/backend` 的集成测试需要，提供 `DATABASE_URL` 才运行）
 
@@ -45,6 +46,8 @@ npm run gate:all      # 逐个 solution 跑 gate（只读：prettier --check + t
 ```
 
 ## 学习路径
+
+第一次上手，先读 `00-开始之前.md`：读者假设、术语表、TypeScript 速览与 12 条 strict 的逐条说明都在那里。
 
 | Day | 主题 | 你会建立的东西 | 测试规模 |
 |----|------|----------------|----------|
