@@ -91,6 +91,13 @@ npm run format:check   # 仅检查格式
 各天的测试规模（文件数 / 用例数）统一维护在 `clean/README.md` 的「学习路径」表中，避免多处数字不一致。
 legacy 中每个问题与 clean 对应纪律的对照，写在每天的 GUIDE 中（含「违规 → 症状」表）。
 
+## 推荐阅读书籍
+
+- **《TypeScript 编程》**（Programming TypeScript，Boris Cherny）：系统讲解 TypeScript 的类型系统、类型推断、泛型与工程配置。可在 Day 01–04 期间配合阅读，重点为类型系统与泛型部分。
+- **《Head First Design Patterns》**（2022 版，Eric Freeman、Elisabeth Robson）：以可视化方式介绍常用设计模式及其适用场景。可在 Day 05–06 期间阅读，对照策略、适配器与观察者等模式理解端口、实现替换和事件机制。
+
+两本书均为扩展阅读，不构成完成本教程的前置条件。
+
 ## 技术栈
 
 | | legacy | clean |
