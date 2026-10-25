@@ -64,6 +64,18 @@ npm run gate:all                # 依次执行全部 8 个 solution 目录的门
 
 每名成员使用独立目录 `exercise/<姓名>/`，从 `develop` 创建 `exercise/<姓名>` 分支，按 `exercise/README.md` 的规范逐日提交。
 
+### 5. 代码格式（Prettier）
+
+根目录提供统一的 Prettier 配置与提交钩子：
+
+```bash
+npm install            # 首次执行：安装依赖并写入 pre-commit 钩子
+npm run format         # 格式化 exercise/ 下的文件
+npm run format:check   # 仅检查格式
+```
+
+提交时钩子仅处理 `exercise/` 下的暂存文件，不会改动 `clean/` 与 `legacy/`；配置说明与成员项目 `.prettierrc` 的要求见 `exercise/README.md` 的「代码格式（Prettier）」一节。
+
 ## 7 天内容概览
 
 | 天数 | legacy 遗留实现 | clean 清洁架构 |
