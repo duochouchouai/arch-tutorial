@@ -2,30 +2,30 @@
 
 预计时间：**120 分钟**（概念 25 + 手打 70 + 验收 25）
 
-> 手打完再对照 `solution/day03/`。
+> 建议完成手打后再对照 `solution/day03/`。
 >
-> **本日涉及的 TS 语法**：`#private` 字段、getter、静态工厂、`readonly`、`z.infer`。不熟悉可先看 `00-开始之前.md` 第 3 节。
+> **本日涉及的 TS 语法**：`#private` 字段、getter、静态工厂、`readonly`、`z.infer`。不熟悉时可先阅读 `00-开始之前.md` 第 3 节。
 
 ---
 
 ## 概念
 
-### 1. 实体不是「带类型的 JSON」
+### 1. 仅含字段的实体
 
 legacy 的 `domain/user.ts`：
 
 ```ts
-export interface User {                 // legacy：一堆公开字段
+export interface User {                 // legacy：全部字段公开
   id: number
   username: string
   failedAttempts: number
   lockedUntil: string | null
 }
 ```
-「锁定」这件事在 legacy 里以「谁都能改字段」的形式散布在用例中：
+在 legacy 中，锁定规则以直接修改字段的形式分散在用例中：
 
 ```ts
-// legacy application/login-user.ts 里的片段
+// 摘自 legacy 的 application/login-user.ts
 user.failedAttempts += 1
 if (user.failedAttempts >= 5) {
   user.lockedUntil = new Date(Date.now() + 30 * 60 * 1000).toISOString()
@@ -33,37 +33,37 @@ if (user.failedAttempts >= 5) {
 await repo.save(user)
 ```
 
-问题：锁定规则能被任何文件绕过；`Date.now()` 出现处无法测；改一次规则要全仓库找。
+由此产生三个问题：锁定规则可被任意文件绕过；`Date.now()` 的出现位置无法在测试中控制；规则变更需要在全仓库检索。
 
-### 2. 实体 = 数据 + 行为（规则跟着数据走）
+### 2. 实体：数据与行为的统一
 
 ```ts
 export class UserEntity {
   readonly id: string
   readonly username: string
-  readonly #now: TimeProvider          // 时间从构造进
+  readonly #now: TimeProvider          // 通过构造函数注入时间
   #failedAttempts: number
   #lockedUntil: number | null
   // ...
 
-  recordFailedLogin(): void { /* 锁定规则在这里，别处不可绕过 */ }
-  recordLogin(): void { /* 清零规则在这里 */ }
+  recordFailedLogin(): void { /* 锁定规则由实体维护，外部不可绕过 */ }
+  recordLogin(): void { /* 登录成功后清零失败计数 */ }
   isLockedAt(time: number): boolean { /* 判据：传入的时刻 */ }
-  toRow(): UserRow { /* 实体 → 表行（跨模块/持久化桥） */ }
-  toSnapshot(): PublicUser { /* 实体 → 对外形状（白名单） */ }
+  toRow(): UserRow { /* 实体到表行的转换（跨模块与持久化桥） */ }
+  toSnapshot(): PublicUser { /* 实体到对外形状的转换（白名单） */ }
 }
 ```
 
-四条纪律：
+四条约束：
 
-1. **`#private` 状态**：外部只能 `getter` 读、业务方法改。`user.failedAttempts = 0` 在类型层面就不存在；
-2. **永不 `Date.now()`**：时间从构造注入的 `TimeProvider` 取。所有「过期/锁定」判据都接受显式时间参数（`isLockedAt(time)`）；
-3. **构造即合法**：`private constructor` + 两个静态工厂 `fromData(row, now)`（从 DB 行恢复）与 `createEmailUser(input, now)`（新账号）；
-4. **桥接方法显式化**：`toRow()` / `fromData()` / `toSnapshot()` 是三个方向的边界翻译 —— 边界写在代码里，而不是靠 `JSON.parse` 随手来。
+1. **`#private` 状态**：外部仅可通过 `getter` 读取、通过业务方法修改；`user.failedAttempts = 0` 在类型层面不可用；
+2. **禁止 `Date.now()`**：时间统一从注入的 `TimeProvider` 获取；所有过期与锁定判据均接受显式时间参数（`isLockedAt(time)`）；
+3. **构造时完成校验**：`private constructor` 配合两个静态工厂 `fromData(row, now)`（从数据库行恢复）与 `createEmailUser(input, now)`（创建新账号）；
+4. **桥接方法显式化**：`toRow()`、`fromData()` 与 `toSnapshot()` 分别处理三个方向的边界转换，避免以 `JSON.parse` 等方式隐式转换。
 
-### 3. 「行形状」为什么是 Schema（SSOT）
+### 3. 行形状由 Schema 定义（SSOT）
 
-账号在存储里的样子由 `UserRowSchema` 唯一定义（zod），类型由 `z.infer` 出：
+账号的存储结构由 `UserRowSchema`（zod）唯一定义，类型通过 `z.infer` 推导：
 
 ```ts
 export const UserRowSchema = z.object({
@@ -76,13 +76,13 @@ export const UserRowSchema = z.object({
 export type UserRow = z.infer<typeof UserRowSchema>
 ```
 
-规则：**全项目不许再手写 interface/type 重述这个形状**。
-（`lockCount` 是 Day 07 才加进来的 —— 届时你会体验到「Schema 是唯一真理源」的好处：改一行，所有用法当场类型报错。）
+约束：全项目不得再手写 `interface` 或 `type` 重复定义该形状。
+（`lockCount` 在 Day 07 加入。届时修改 Schema 一处，所有使用位置都会立即产生类型错误，体现 Schema 作为唯一来源的作用。）
 
 ### 4. 对外形状是白名单
 
-`PublicUser`（`{ id, username, email, phone }`）只包含允许出现在响应里的字段 ——
-**不是**「实体减掉几个字段」，而是独立定义的一份契约。`passwordHash` / `failedAttempts` 永远不出来。
+`PublicUser`（`{ id, username, email, phone }`）仅包含允许出现在响应中的字段。
+该形状是独立定义的契约，并非从实体中删减字段；`passwordHash` 与 `failedAttempts` 不会出现在响应中。
 
 ---
 
@@ -94,7 +94,7 @@ export type UserRow = z.infer<typeof UserRowSchema>
 export const MAX_FAILED_ATTEMPTS = 5
 export const LOCK_DURATION_MS = 30 * 60 * 1000
 ```
-（Day 07 会把它升级成递进式阶梯；先让业务数字只有一处。）
+（Day 07 将改为递进式阶梯；当前先保证业务常量只有一个来源。）
 
 ### 2. `src/modules/auth/domain/schemas/user.ts` + `api/user.ts`
 
@@ -103,32 +103,32 @@ export const LOCK_DURATION_MS = 30 * 60 * 1000
 
 ### 3. `src/modules/auth/domain/entities/user.entity.ts`
 
-按上面四条纪律实现。几个手打时的关键判断：
+按上述四条约束实现。实现时的关键判断如下：
 
-- **`failedAttempts` 何时清零**：`recordLogin()` 里清；`recordFailedLogin()` 里累加，达到 5 就写 `lockedUntil`；
-- **`isLockedAt(time)` 而不是 `isLocked()`**：判据来自调用方传入的时刻（用例用同一个 `now` 判全部），避免「构造时取一次时间、判断时又取一次」的撕裂；
-- **`toRow()` 不要漏字段**：写完第一件事是写「往返测试」（`fromData(toRow()) → toRow()` 深比较相等）。
+- **`failedAttempts` 的重置时机**：`recordLogin()` 中清零；`recordFailedLogin()` 中累加，达到 5 时写入 `lockedUntil`；
+- **采用 `isLockedAt(time)`，不提供 `isLocked()`**：判据使用调用方传入的时刻（用例以同一个 `now` 判断全部状态），避免构造与判断阶段取到不同时间；
+- **`toRow()` 不得遗漏字段**：实现后应立即补充往返测试，断言 `fromData(toRow())` 与 `toRow()` 深比较相等。
 
-### 4. `tests/support/fakes.ts`（从今天起有测试替身）
+### 4. `tests/support/fakes.ts`（测试替身）
 
 ```ts
 export class FakeTimeProvider implements TimeProvider {
   #nowMs: number
   constructor(startMs = 1_700_000_000_000) { this.#nowMs = startMs }
   now() { return this.#nowMs }
-  advance(ms: number) { this.#nowMs += ms }   // 时间旅行
+  advance(ms: number) { this.#nowMs += ms }   // 推进时间
 }
 ```
 
 ### 5. 实体测试（`user.entity.test.ts`）
 
-必测：
+必要测试：
 1. `createEmailUser` 初始状态 + 时间戳来自注入时钟；
 2. `recordLogin` 清零 + `lastLoginAt`；
 3. 第 5 次失败 → `lockedUntil = now + LOCK_DURATION_MS`；
 4. `isLockedAt` 边界：`lockedUntil - 1` 为 true、`lockedUntil` 为 false；
 5. `fromData` / `toRow` 往返不丢字段；
-6. `toSnapshot` 的键只有 `['email','id','phone','username']`（**断言键集合**，防止未来不小心加字段泄密）。
+6. `toSnapshot` 的键只有 `['email','id','phone','username']`（**断言键集合**，防止新增字段导致信息泄露）。
 
 ---
 
@@ -140,9 +140,9 @@ cd solution/day03 && npm install && npm run gate
 
 | 检查 | 期望 |
 |------|------|
-| `npm test` | **10 个文件 / 43 个测试**全过 |
-| 时间旅行 | 锁定用例里**没有** `sleep`，只有 `time.advance(...)` |
-| `grep -rn "Date.now()" src/modules/auth` | 无结果（auth 侧完全用注入时钟） |
+| `npm test` | **10 个文件 / 43 个测试**全部通过 |
+| 时间控制 | 锁定用例中不使用 `sleep`，仅使用 `time.advance(...)` |
+| `grep -rn "Date.now()" src/modules/auth` | 无结果（auth 模块完全使用注入时钟） |
 | 不可变自查 | 尝试 `user.failedAttempts = 0` 应编译失败 |
 
 ---
@@ -151,9 +151,9 @@ cd solution/day03 && npm install && npm run gate
 
 | 违规 | 症状 |
 |------|------|
-| 实体字段 `public`（没有 `#`） | 用例里出现 `user.lockedUntil = ...`；规则从实体漏进用例，两处规则开始漂移 |
-| 实体里 `Date.now()` | 测试要 `await sleep(50)`；CI 偶发红；跨时区/夏令时出错 |
-| 手写 `interface UserRow` 与 Schema 并存 | Day 07 加 `lockCount` 时只改了一处，另一处静默不一致，直到运行时才暴露 |
-| `toSnapshot()` 返回 `this`（直接吐实体） | 响应里出现 `passwordHash`；测试若只断言个别字段则发现不了 —— 所以要断言键集合 |
-| 用 `as` 把 DB 行断言成 `UserRow` | 列名写错/数据库升级后字段缺失都不会报错，直到线上出现 `undefined` |
+| 实体字段为 `public`（未使用 `#`） | 用例中直接赋值 `user.lockedUntil = ...`，锁定规则从实体泄漏到用例，两处规则逐渐不一致 |
+| 实体中出现 `Date.now()` | 测试需要使用 `await sleep(50)`；CI 偶发失败；跨时区或夏令时出错 |
+| 手写 `interface UserRow` 与 Schema 并存 | Day 07 新增 `lockCount` 时只修改一处，另一处出现不一致，直到运行时才暴露 |
+| `toSnapshot()` 返回 `this`（直接返回实体） | 响应中出现 `passwordHash`；测试若仅断言个别字段则无法发现，因此需断言键集合 |
+| 用 `as` 将数据库行断言为 `UserRow` | 列名错误或数据库升级后字段缺失都不会报错，直到运行时出现 `undefined` |
 
