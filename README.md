@@ -1,8 +1,10 @@
 <h1 align="center">屎山代码演进教程 🏔️💩 → 🏗️✨</h1>
 
-![Node.js ≥ 22.5](https://img.shields.io/badge/Node.js-%E2%89%A5%2022.5-339933?logo=nodedotjs&logoColor=white&style=flat-square)
-![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white&style=flat-square)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-blueviolet?style=flat-square)](exercise/README.md)
+<p align="center">
+  <img alt="Node.js ≥ 22.5" src="https://img.shields.io/badge/Node.js-%E2%89%A5%2022.5-339933?logo=nodedotjs&logoColor=white&style=flat-square">
+  <img alt="TypeScript strict" src="https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white&style=flat-square">
+  <a href="exercise/README.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-blueviolet?style=flat-square"></a>
+</p>
 
 本仓库为内部培训教程，用于对比「vibe coding 形成的遗留系统」与「多模块清洁架构」的差异。
 
