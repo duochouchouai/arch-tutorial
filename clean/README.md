@@ -5,7 +5,7 @@ legacy 是「vibe coding 堆出来的屎山」，clean 是同一个业务（登�
 
 ```
 clean/
-├── 00-开始之前.md         读者假设 + 术语表 + TypeScript 速览（先读）
+├── 00-开始之前.md         预备知识 + 术语表 + TypeScript 速览（先读）
 ├── GUIDE-day01..07.md     手打教程（概念 → 手打目标 → 验收点 → 违规 → 症状）
 ├── solution/day01..06/    每天的参考答案（独立可跑：npm install && npm run gate）
 ├── solution/day07/

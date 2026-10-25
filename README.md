@@ -18,7 +18,7 @@
 │   └── day01..06/                每个 day 独立可跑（node day*.js）
 │
 ├── clean/                        ← 清洁架构手打教程
-│   ├── 00-开始之前.md            读者假设 + 术语表 + TypeScript 速览（先读）
+│   ├── 00-开始之前.md            预备知识 + 术语表 + TypeScript 速览（先读）
 │   ├── GUIDE-day01..07.md        教程正文：概念 → 手打目标 → 验收点 → 违规→症状
 │   ├── solution/day01..06/       每天参考答案（独立项目，npm install && npm run gate）
 │   ├── solution/day07/
@@ -44,7 +44,7 @@ cd legacy/day06 && npm install && npm start
 ```bash
 cd clean
 npm run install:all      # 给所有 solution 目录装依赖（每个目录是独立项目）
-cat 00-开始之前.md        # 读者假设、术语表与 TS 速览（先读这一篇）
+cat 00-开始之前.md        # 预备知识、术语表与 TS 速览（先读这一篇）
 cat GUIDE-day01.md       # 从第一天开始，跟着 GUIDE 打代码
 ```
 
