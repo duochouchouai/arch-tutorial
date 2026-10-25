@@ -7,7 +7,7 @@
  * 提交钩子的格式化结果会不一致。
  */
 import { readFileSync, readdirSync } from 'node:fs'
-import { basename, dirname, join, sep } from 'node:path'
+import { dirname, join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)))
@@ -15,15 +15,29 @@ const exerciseDir = join(root, 'exercise')
 const canonical = JSON.parse(readFileSync(join(root, '.prettierrc'), 'utf8'))
 const canonicalKeys = new Set(Object.keys(canonical))
 
-const configs = readdirSync(exerciseDir, { recursive: true })
-  .map((entry) => String(entry))
-  .filter((entry) => basename(entry) === '.prettierrc')
-  .sort()
+const ignoredDirectories = new Set(['node_modules', 'dist', 'coverage', '.git'])
 
+function findConfigs(directory) {
+  const configs = []
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      if (!ignoredDirectories.has(entry.name)) {
+        configs.push(...findConfigs(join(directory, entry.name)))
+      }
+      continue
+    }
+    if (entry.name === '.prettierrc') {
+      configs.push(join(directory, entry.name))
+    }
+  }
+  return configs
+}
+
+const configs = findConfigs(exerciseDir).sort()
 const failures = []
-for (const relative of configs) {
-  const label = ['exercise', ...relative.split(sep)].join('/')
-  const path = join(exerciseDir, relative)
+for (const path of configs) {
+  const relativePath = relative(exerciseDir, path)
+  const label = ['exercise', ...relativePath.split(sep)].join('/')
   let actual
   try {
     actual = JSON.parse(readFileSync(path, 'utf8'))
