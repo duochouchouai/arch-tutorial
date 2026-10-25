@@ -6,11 +6,11 @@ legacy 是「vibe coding 堆出来的屎山」，clean 是同一个业务（登�
 ```
 clean/
 ├── 00-开始之前.md         读者假设 + 术语表 + TypeScript 速览（先读）
-├── GUIDE-day01..07.md     手打教程（概念 → 手打目标 → 验收点 → 违规→症状）
+├── GUIDE-day01..07.md     手打教程（概念 → 手打目标 → 验收点 → 违规→ 症状）
 ├── solution/day01..06/    每天的参考答案（独立可跑：npm install && npm run gate）
 ├── solution/day07/
 │   ├── backend/           Day 07 参考答案（后端）
-│   └── uniapp-login/      Day 07 参考答案（uni-app 前端）
+│   └── uniapp-Frontend/    Day 07 参考答案（uni-app 前端）
 └── docs/
     ├── conventions.md     架构约定（每条都对应可执行的检查）
     └── dependency-graph.md 依赖图 / import 规则矩阵 / 数据流
@@ -22,7 +22,7 @@ clean/
 - npm ≥ 10
 - 可选：PostgreSQL（只有 `solution/day07/backend` 的集成测试需要，提供 `DATABASE_URL` 才运行）
 
-## 快速开始（跑参考答案）
+## 快速开始
 
 每个 solution 目录都是**独立项目**（自己的 `package.json` / `package-lock.json`）：
 
@@ -47,7 +47,7 @@ npm run gate:all      # 逐个 solution 跑 gate（只读：prettier --check + t
 
 ## 学习路径
 
-第一次上手，先读 `00-开始之前.md`：读者假设、术语表、TypeScript 速览与 12 条 strict 的逐条说明都在那里。
+开始之前，建议先阅读 `00-开始之前.md`，了解术语表、TypeScript 速览与 12 条 strict 的逐条说明及其他相关内容。
 
 | Day | 主题 | 你会建立的东西 | 测试规模 |
 |----|------|----------------|----------|

@@ -154,7 +154,7 @@ Day 06 的可用能力：注册（验证码）/ 登录（5 次锁定 30 分钟�
 **验收点**
 
 ```bash
-cd solution/day07/uniapp-login && npm install && npm run gate
+cd solution/day07/uniapp-Frontend && npm install && npm run gate
 ```
 - 3 个测试文件 / 15 个测试全过（Schema 校验 + 字段级错误映射 + api 层信封映射，用假 `uni` 替身）；
 - `grep -rn "uni.request" pages src/application src/domain` 无结果；
@@ -176,7 +176,7 @@ cd solution/day07/uniapp-login && npm install && npm run gate
 | 项 | 命令 | 期望 |
 |---|---|---|
 | 后端门禁 | `cd day07/backend && npm run gate` | 27 文件通过 + 1 跳过（PG 集成）/ 109 测试通过 + 3 跳过 |
-| 前端门禁 | `cd day07/uniapp-login && npm run gate` | 3 文件 / 15 测试通过 |
+| 前端门禁 | `cd day07/uniapp-Frontend && npm run gate` | 3 文件 / 15 测试通过 |
 | 架构守卫 | 后端 `npm test` 里的 `architecture.test.ts` | 3 条规则全绿，无新增豁免 |
 | 换库验证 | `.env` 里设 `DATABASE_URL=postgres://…` 后 `npm test`（可选） | 集成测试从「跳过」变「通过」 |
 | 冒烟 | `npm start` + 走一遍 注册→登录→忘记密码→重置→新密码登录 | 全流程成功 |

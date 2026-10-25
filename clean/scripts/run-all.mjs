@@ -17,7 +17,7 @@ const targets = [
   'solution/day05',
   'solution/day06',
   'solution/day07/backend',
-  'solution/day07/uniapp-login',
+  'solution/day07/uniapp-Frontend',
 ]
 
 const mode = process.argv[2] ?? 'gate'

@@ -5,7 +5,7 @@
 ```
 day07/
 ├── backend/          后端参考答案（= day06 + 4 个任务）
-└── uniapp-login/     前端参考答案（登录/注册/忘记密码/重置 + 会话）
+└── uniapp-Frontend/  前端参考答案（登录/注册/忘记密码/重置 + 会话）
 ```
 
 ## 运行
@@ -21,7 +21,7 @@ npm start                                      # http://localhost:3000
 npm test                                       # 不设 DATABASE_URL 时整个文件自动跳过
 
 # 前端（uni-app 的 .vue 页面用 HBuilderX 打开；门禁只覆盖 TS 层）
-cd uniapp-login && npm install && npm run gate  # 3 文件 / 15 测试
+cd uniapp-Frontend && npm install && npm run gate  # 3 文件 / 15 测试
 ```
 
 ## 任务 → 代码映射
@@ -32,7 +32,7 @@ cd uniapp-login && npm install && npm run gate  # 3 文件 / 15 测试
 | **2. PostgreSQL 仓储**（只改基础设施） | users 增加 PG 实现；组合根按 `DATABASE_URL` 选实现 | `users/infrastructure/postgres-user-account-repository.ts`、`users/compose.ts`、`src/config/index.ts`、`src/main.ts` |
 | **3. 忘记密码 / 重置密码**（防枚举 + 用途隔离 + 吊销旧会话） | 两个新用例 + 校验器 + 路由；会话端口加 `removeAllForUser` | `auth/application/{forgot,reset}-password.usecase.ts`、`auth/domain/validators/*.ts`、`auth/presentation/auth.routes.ts`、`auth/domain/ports/session-store.port.ts` |
 | **4. notifications 订阅**（附加题） | 新模块 + 事件载荷扩展（带 `username`/`email`） | `notifications/**`、`auth/domain/events/user-registered.event.ts`、`auth/application/user-registered.publisher.ts` |
-| **前端 uniapp** | 页面 + `uni.request` 唯一出口 + 前端 Schema | `uniapp-login/src/infrastructure/auth-api.ts`、`src/domain/schemas.ts`、`src/application/use*.ts`、`pages/**` |
+| **前端 uniapp** | 页面 + `uni.request` 唯一出口 + 前端 Schema | `uniapp-Frontend/src/infrastructure/auth-api.ts`、`src/domain/schemas.ts`、`src/application/use*.ts`、`pages/**` |
 
 ## 与 Day 06 的差异（`diff -r` 概览）
 

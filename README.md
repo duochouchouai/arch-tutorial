@@ -23,7 +23,7 @@
 │   ├── solution/day01..06/       每天参考答案（独立项目，npm install && npm run gate）
 │   ├── solution/day07/
 │   │   ├── backend/              综合项目参考答案（后端）
-│   │   └── uniapp-login/         综合项目参考答案（uni-app 前端）
+│   │   └── uniapp-Frontend/       综合项目参考答案（uni-app 前端）
 │   ├── docs/conventions.md       架构约定（每条对应可执行检查）
 │   └── docs/dependency-graph.md  依赖图 / import 规则矩阵 / 数据流
 │
