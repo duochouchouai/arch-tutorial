@@ -1,0 +1,25 @@
+{
+  "name": "arch-tutorial-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "教程仓库工作区：共享 Prettier 配置与提交钩子",
+  "scripts": {
+    "prepare": "simple-git-hooks",
+    "format": "prettier --config .prettierrc --write exercise",
+    "format:check": "prettier --config .prettierrc --check exercise"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "node scripts/check-exercise-prettier.mjs && npx lint-staged"
+  },
+  "lint-staged": {
+    "exercise/**/*.{js,jsx,ts,tsx,mjs,cjs,json,md,yml,yaml,css,scss,vue,html}": "prettier --config .prettierrc --write"
+  },
+  "devDependencies": {
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.9.10",
+    "simple-git-hooks": "^2.14.0"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
